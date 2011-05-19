@@ -3,6 +3,8 @@
  */
 package uk.co.jemos.protomak.engine.test.unit;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 /**
@@ -23,7 +25,7 @@ public class ConversionEngineUnitTest {
 
 	@Test
 	public void testXsdToProtoConversionEngineForNonExistingFile() {
-
+		Assert.fail("Not implemented yet.");
 	}
 
 	// ------------------->> Getters / Setters
