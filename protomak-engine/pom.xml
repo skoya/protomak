@@ -136,10 +136,53 @@
 					</descriptors>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.7.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- Changes the default schema directory -->
+					<schemaDirectory>src/main/resources/xsds</schemaDirectory>
+					<schemaIncludes>
+						<include>**/*.xsd</include>
+					</schemaIncludes>
+					<!-- Exclude as necessary 
+					<schemaExcludes>
+						<exclude>one/two/*.xsd</exclude>
+					</schemaExcludes>
+					 -->
+					<!-- 
+					<bindingDirectory>src/main/resources/binding</bindingDirectory>
+					<bindingIncludes>
+						<include>**/*.xjb</include>
+					</bindingIncludes>
+					 
+					<bindingExcludes>
+						<exclude>one/two/*.xjb</exclude>
+					</bindingExcludes>
+					 -->
+				</configuration>
+
+
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
+
+		<!-- XML binding stuff -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.2</version>
+		</dependency>
 		<dependency>
 			<groupId>net.jcip</groupId>
 			<artifactId>jcip-annotations</artifactId>
@@ -149,7 +192,7 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.8</version>
-		</dependency>	
+		</dependency>
 
 
 		<!-- Testing dependencies -->
@@ -160,9 +203,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		  <groupId>org.easymock</groupId>
-		  <artifactId>easymock</artifactId>
-		  <version>3.0</version>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.0</version>
 		</dependency>
 
 	</dependencies>
