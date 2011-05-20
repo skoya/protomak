@@ -3,6 +3,8 @@
  */
 package uk.co.jemos.protomak.engine.test.unit;
 
+import java.util.List;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
@@ -11,6 +13,10 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
+import uk.co.jemos.protomak.engine.generated.xsd.MessageAttributeType;
+import uk.co.jemos.protomak.engine.generated.xsd.MessageType;
 import uk.co.jemos.protomak.engine.generated.xsd.ObjectFactory;
 import uk.co.jemos.protomak.engine.generated.xsd.ProtoType;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
@@ -42,6 +48,22 @@ public class ProtoXsdDefinitionUnitTest {
 		ProtoType proto = new ProtoType();
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_1);
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_2);
+
+		MessageType msgType = new MessageType();
+		List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
+
+		int idx = 1;
+
+		PodamFactory factory = new PodamFactoryImpl();
+		for (int i = 0; i < 3; i++) {
+			MessageAttributeType messageAttributeType = factory
+					.manufacturePojo(MessageAttributeType.class);
+			messageAttributeType.setIndex(idx++);
+			msgAttributes.add(messageAttributeType);
+		}
+
+		proto.setMessage(msgType);
+
 		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
