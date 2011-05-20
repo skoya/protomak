@@ -1,0 +1,5 @@
+To build PROTOMAK: 
+
+$ cd protomak-engine
+
+$ mvn clean install
