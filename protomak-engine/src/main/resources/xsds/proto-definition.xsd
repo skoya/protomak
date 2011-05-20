@@ -1,3 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/proto-definition" xmlns:tns="http://www.example.org/proto-definition" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.co.uk/xsds/protomak/proto-definition"
+		xmlns:tns="http://www.jemos.co.uk/xsds/protomak/proto-definition" elementFormDefault="qualified">
+
+    
+
+    <complexType name="ProtoType">
+    	<sequence>
+    		<element name="import" type="string" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="package" type="string" maxOccurs="1" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+	<element name="proto" type="tns:ProtoType"></element>
+    
 </schema>
