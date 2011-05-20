@@ -44,6 +44,7 @@ public class ProtoXsdDefinitionUnitTest {
 		Assert.assertNotNull("The JAXB context cannot be null!");
 		Marshaller marshaller = ctx.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 
 		ProtoType proto = new ProtoType();
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_1);
