@@ -158,6 +158,7 @@
 						<exclude>one/two/*.xsd</exclude>
 					</schemaExcludes>
 					 -->
+					<generatePackage>uk.co.jemos.protomak.engine.xsd</generatePackage>
 					<!-- 
 					<bindingDirectory>src/main/resources/binding</bindingDirectory>
 					<bindingIncludes>
