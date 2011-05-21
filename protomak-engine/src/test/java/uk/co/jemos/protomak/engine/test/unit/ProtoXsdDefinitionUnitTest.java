@@ -74,10 +74,15 @@ public class ProtoXsdDefinitionUnitTest {
 
 		int idx = 1;
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			MessageAttributeType messageAttributeType = factory
 					.manufacturePojo(MessageAttributeType.class);
 			messageAttributeType.setIndex(idx++);
+			if (i % 2 == 0) {
+				messageAttributeType.getRuntimeType().setCustomType(null);
+			} else {
+				messageAttributeType.getRuntimeType().setProtoType(null);
+			}
 			msgAttributes.add(messageAttributeType);
 		}
 

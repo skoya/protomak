@@ -31,7 +31,7 @@
 	</simpleType>
 
 	<!-- This are the proto types -->
-	<simpleType name="MessageAttributeRuntimeType">
+	<simpleType name="ProtoRuntimeType">
 		<restriction base="string">
 			<enumeration value="double"></enumeration>
 			<enumeration value="float"></enumeration>
@@ -52,11 +52,11 @@
 	</simpleType>
 
 	<complexType name="MessageAttributeType">
+		<sequence>
+			<element name="runtimeType" type="tns:MessageRuntimeType"></element>
+		</sequence>
 		<attribute name="optionality"
 			type="tns:MessageAttributeOptionalType" use="required">
-		</attribute>
-		<attribute name="runtimeType"
-			type="tns:MessageAttributeRuntimeType" use="required">
 		</attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="index" type="int" use="required"></attribute>
@@ -84,5 +84,12 @@
 	<complexType name="KeyValueType">
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="value" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="MessageRuntimeType">
+		<all>
+			<element name="protoType" type="tns:ProtoRuntimeType" ></element>
+			<element name="customType" type="string"></element>
+		</all>
 	</complexType>
 </schema>
