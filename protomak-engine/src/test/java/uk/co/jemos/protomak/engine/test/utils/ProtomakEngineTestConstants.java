@@ -26,4 +26,8 @@ public class ProtomakEngineTestConstants {
 	/** A package name for a proto file */
 	public static final String PROTO_PACKAGE = "uk.co.jemos.protomak.test.unit";
 
+	/** Non instantiable constructor */
+	private ProtomakEngineTestConstants() {
+	}
+
 }
