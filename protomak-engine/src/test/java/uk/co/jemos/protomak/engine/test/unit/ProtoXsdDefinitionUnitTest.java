@@ -68,13 +68,18 @@ public class ProtoXsdDefinitionUnitTest {
 
 		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
 
-		ExtendType extendType = factory.manufacturePojo(ExtendType.class);
-		extendType.getExtendAttribute().getRuntimeType().setCustomType(null);
+		ExtendType extendType = getExtendType(factory);
 		proto.setExtend(extendType);
 
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
 
+	}
+
+	private ExtendType getExtendType(PodamFactory factory) {
+		ExtendType extendType = factory.manufacturePojo(ExtendType.class);
+		extendType.getExtendAttribute().getRuntimeType().setCustomType(null);
+		return extendType;
 	}
 
 	// ------------------->> Getters / Setters
@@ -113,6 +118,9 @@ public class ProtoXsdDefinitionUnitTest {
 
 		List<ExtensionType> extensions = msgType.getExtensions();
 		extensions.add(factory.manufacturePojo(ExtensionType.class));
+
+		ExtendType extendType = getExtendType(factory);
+		msgType.getExtend().add(extendType);
 
 		return msgType;
 	}
