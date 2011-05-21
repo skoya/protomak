@@ -17,6 +17,8 @@ import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.xsds.protomak.proto.EnumType;
+import uk.co.jemos.xsds.protomak.proto.KeyValueType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ObjectFactory;
@@ -44,6 +46,9 @@ public class ProtoXsdDefinitionUnitTest {
 		JAXBContext ctx = JAXBContext
 				.newInstance(ProtomakEngineConstants.GENERATED_CODE_PACKAGE_NAME);
 		Assert.assertNotNull("The JAXB context cannot be null!");
+
+		PodamFactory factory = new PodamFactoryImpl();
+
 		Marshaller marshaller = ctx.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
@@ -54,11 +59,21 @@ public class ProtoXsdDefinitionUnitTest {
 
 		MessageType msgType = new MessageType();
 		msgType.setName(ProtomakEngineConstants.PROTO_MESSAGE_DEFAULT_NAME);
+
+		List<EnumType> enums = msgType.getEnum();
+		for (int i = 0; i < 5; i++) {
+			EnumType enumType = factory.manufacturePojo(EnumType.class);
+			List<KeyValueType> values = enumType.getEnumConstant();
+			for (int j = 0; j < 2; j++) {
+				values.add(factory.manufacturePojo(KeyValueType.class));
+			}
+			enums.add(enumType);
+		}
+
 		List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
 
 		int idx = 1;
 
-		PodamFactory factory = new PodamFactoryImpl();
 		for (int i = 0; i < 3; i++) {
 			MessageAttributeType messageAttributeType = factory
 					.manufacturePojo(MessageAttributeType.class);

@@ -26,6 +26,7 @@
 		<restriction base="string">
 			<enumeration value="required"></enumeration>
 			<enumeration value="optional"></enumeration>
+			<enumeration value="repeated"></enumeration>
 		</restriction>
 	</simpleType>
 
@@ -52,13 +53,15 @@
 
 	<complexType name="MessageAttributeType">
 		<attribute name="optionality"
-			type="tns:MessageAttributeOptionalType">
+			type="tns:MessageAttributeOptionalType" use="required">
 		</attribute>
 		<attribute name="runtimeType"
-			type="tns:MessageAttributeRuntimeType">
+			type="tns:MessageAttributeRuntimeType" use="required">
 		</attribute>
-		<attribute name="name" type="string"></attribute>
-		<attribute name="index" type="int"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="index" type="int" use="required"></attribute>
+		<attribute name="comments" type="string" use="optional"></attribute>
+		<attribute name="defaultValue" type="string" use="optional"></attribute>
 	</complexType>
 
 	<complexType name="MessageType">
@@ -66,7 +69,20 @@
 			<element name="msgAttribute" type="tns:MessageAttributeType"
 				maxOccurs="unbounded" minOccurs="0">
 			</element>
+			<element name="enum" type="tns:EnumType" maxOccurs="unbounded" minOccurs="0"></element>
 		</sequence>
-		<attribute name="name" type="string"></attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="EnumType">
+		<sequence>
+			<element name="enumConstant" type="tns:KeyValueType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="KeyValueType">
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="value" type="string" use="required"></attribute>
 	</complexType>
 </schema>
