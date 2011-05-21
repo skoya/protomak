@@ -24,6 +24,7 @@ import uk.co.jemos.xsds.protomak.proto.KeyValueType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ObjectFactory;
+import uk.co.jemos.xsds.protomak.proto.OptionElementType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 import uk.co.jemos.xsds.protomak.proto.ServiceType;
 
@@ -73,6 +74,11 @@ public class ProtoXsdDefinitionUnitTest {
 		proto.getExtend().add(extendType);
 
 		proto.getService().add(factory.manufacturePojo(ServiceType.class));
+
+		List<OptionElementType> options = proto.getOption();
+		for (int i = 0; i < 2; i++) {
+			options.add(factory.manufacturePojo(OptionElementType.class));
+		}
 
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
