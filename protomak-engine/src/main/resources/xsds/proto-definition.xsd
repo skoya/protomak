@@ -17,8 +17,9 @@
     		<element name="package" type="string" maxOccurs="1"
     			minOccurs="0">
     		</element>
-    		<element name="message" type="tns:MessageType"></element>
-    		<element name="extend" type="tns:ExtendType"></element>
+    		<element name="message" type="tns:MessageType" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="extend" type="tns:ExtendType" maxOccurs="unbounded" minOccurs="0"></element>
+    		<element name="service" type="tns:ServiceType" maxOccurs="unbounded" minOccurs="0"></element>
     	</sequence>
     </complexType>	
 
@@ -104,14 +105,27 @@
 	</complexType>
 
 	<complexType name="ExtensionType">
-		<attribute name="fromIndex" type="int"></attribute>
-		<attribute name="toIndex" type="int"></attribute>
+		<attribute name="fromIndex" type="int" use="required"></attribute>
+		<attribute name="toIndex" type="int" use="required"></attribute>
 	</complexType>
 
 	<complexType name="ExtendType">
 		<sequence>
 			<element name="extendAttribute" type="tns:MessageAttributeType"></element>
 		</sequence>
-		<attribute name="messageName" type="string"></attribute>
+		<attribute name="messageName" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="ServiceMethodType">
+		<attribute name="serviceName" type="string" use="required"></attribute>
+		<attribute name="messageRequestName" type="string" use="required"></attribute>
+		<attribute name="messageResponseName" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="ServiceType">
+		<sequence>
+			<element name="serviceDefinition" type="tns:ServiceMethodType" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
 </schema>

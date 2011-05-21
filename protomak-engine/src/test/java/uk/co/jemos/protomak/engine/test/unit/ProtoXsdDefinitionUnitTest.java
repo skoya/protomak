@@ -25,6 +25,7 @@ import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ObjectFactory;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
+import uk.co.jemos.xsds.protomak.proto.ServiceType;
 
 /**
  * Unit test to check the XSD which defines a proto file
@@ -64,28 +65,31 @@ public class ProtoXsdDefinitionUnitTest {
 		MessageType nestedMessageType = getMessageType(factory);
 		msgType.getNestedMessage().add(nestedMessageType);
 
-		proto.setMessage(msgType);
+		proto.getMessage().add(msgType);
 
 		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
 
 		ExtendType extendType = getExtendType(factory);
-		proto.setExtend(extendType);
+		proto.getExtend().add(extendType);
+
+		proto.getService().add(factory.manufacturePojo(ServiceType.class));
 
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
 
 	}
 
-	private ExtendType getExtendType(PodamFactory factory) {
-		ExtendType extendType = factory.manufacturePojo(ExtendType.class);
-		extendType.getExtendAttribute().getRuntimeType().setCustomType(null);
-		return extendType;
-	}
-
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods
 
+	/**
+	 * It manufactures and returns a {@link MessageType}
+	 * 
+	 * @param factory
+	 *            The Podam Factory to auto-fill POJO attributes
+	 * @return A {@link MessageType}
+	 */
 	private MessageType getMessageType(PodamFactory factory) {
 
 		MessageType msgType = factory.manufacturePojo(MessageType.class);
@@ -123,6 +127,19 @@ public class ProtoXsdDefinitionUnitTest {
 		msgType.getExtend().add(extendType);
 
 		return msgType;
+	}
+
+	/**
+	 * It manufactures and returns an {@link ExtensionType}
+	 * 
+	 * @param factory
+	 *            The Podam factory
+	 * @return An {@link ExtensionType}
+	 */
+	private ExtendType getExtendType(PodamFactory factory) {
+		ExtendType extendType = factory.manufacturePojo(ExtendType.class);
+		extendType.getExtendAttribute().getRuntimeType().setCustomType(null);
+		return extendType;
 	}
 
 	//------------------->> equals() / hashcode() / toString()
