@@ -18,6 +18,7 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.EnumType;
+import uk.co.jemos.xsds.protomak.proto.ExtendType;
 import uk.co.jemos.xsds.protomak.proto.ExtensionType;
 import uk.co.jemos.xsds.protomak.proto.KeyValueType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
@@ -42,7 +43,7 @@ public class ProtoXsdDefinitionUnitTest {
 	//------------------->> Public methods
 
 	@Test
-	public void testProtoXmlConformsToXsd() throws Exception {
+	public void testProtoXsd() throws Exception {
 
 		JAXBContext ctx = JAXBContext
 				.newInstance(ProtomakEngineConstants.GENERATED_CODE_PACKAGE_NAME);
@@ -66,10 +67,19 @@ public class ProtoXsdDefinitionUnitTest {
 		proto.setMessage(msgType);
 
 		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
+
+		ExtendType extendType = factory.manufacturePojo(ExtendType.class);
+		extendType.getExtendAttribute().getRuntimeType().setCustomType(null);
+		proto.setExtend(extendType);
+
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
 
 	}
+
+	// ------------------->> Getters / Setters
+
+	//------------------->> Private methods
 
 	private MessageType getMessageType(PodamFactory factory) {
 
@@ -106,10 +116,6 @@ public class ProtoXsdDefinitionUnitTest {
 
 		return msgType;
 	}
-
-	// ------------------->> Getters / Setters
-
-	//------------------->> Private methods
 
 	//------------------->> equals() / hashcode() / toString()
 

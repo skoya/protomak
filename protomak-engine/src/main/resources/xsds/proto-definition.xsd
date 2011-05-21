@@ -18,6 +18,7 @@
     			minOccurs="0">
     		</element>
     		<element name="message" type="tns:MessageType"></element>
+    		<element name="extend" type="tns:ExtendType"></element>
     	</sequence>
     </complexType>	
 
@@ -102,5 +103,12 @@
 	<complexType name="ExtensionType">
 		<attribute name="fromIndex" type="int"></attribute>
 		<attribute name="toIndex" type="int"></attribute>
+	</complexType>
+
+	<complexType name="ExtendType">
+		<sequence>
+			<element name="extendAttribute" type="tns:MessageAttributeType"></element>
+		</sequence>
+		<attribute name="messageName" type="string"></attribute>
 	</complexType>
 </schema>
