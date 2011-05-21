@@ -53,6 +53,7 @@ public class ProtoXsdDefinitionUnitTest {
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_2);
 
 		MessageType msgType = new MessageType();
+		msgType.setName(ProtomakEngineConstants.PROTO_MESSAGE_DEFAULT_NAME);
 		List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
 
 		int idx = 1;

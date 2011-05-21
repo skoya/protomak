@@ -63,7 +63,10 @@
 
 	<complexType name="MessageType">
 		<sequence>
-			<element name="msgAttribute" type="tns:MessageAttributeType" maxOccurs="unbounded" minOccurs="0"></element>
+			<element name="msgAttribute" type="tns:MessageAttributeType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
 		</sequence>
+		<attribute name="name" type="string"></attribute>
 	</complexType>
 </schema>
