@@ -15,11 +15,12 @@ import org.junit.Test;
 
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-import uk.co.jemos.protomak.engine.generated.xsd.MessageAttributeType;
-import uk.co.jemos.protomak.engine.generated.xsd.MessageType;
-import uk.co.jemos.protomak.engine.generated.xsd.ObjectFactory;
-import uk.co.jemos.protomak.engine.generated.xsd.ProtoType;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
+import uk.co.jemos.xsds.protomak.proto.MessageType;
+import uk.co.jemos.xsds.protomak.proto.ObjectFactory;
+import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 /**
  * Unit test to check the XSD which defines a proto file
@@ -40,7 +41,8 @@ public class ProtoXsdDefinitionUnitTest {
 	@Test
 	public void testProtoXmlConformsToXsd() throws Exception {
 
-		JAXBContext ctx = JAXBContext.newInstance("uk.co.jemos.protomak.engine.generated.xsd");
+		JAXBContext ctx = JAXBContext
+				.newInstance(ProtomakEngineConstants.GENERATED_CODE_PACKAGE_NAME);
 		Assert.assertNotNull("The JAXB context cannot be null!");
 		Marshaller marshaller = ctx.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);

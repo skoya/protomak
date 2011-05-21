@@ -152,8 +152,7 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-				  <generatePackage>uk.co.jemos.protomak.engine.generated.xsd</generatePackage>
+				<configuration>				  
 				  <schemaDirectory>${basedir}/src/main/resources/xsds</schemaDirectory>
 				  <includeSchemas>
 				    <includeSchema>**/*.xsd</includeSchema>

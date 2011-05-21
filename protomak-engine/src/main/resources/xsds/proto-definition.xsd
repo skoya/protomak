@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.co.uk/xsds/protomak/proto-definition"
-		xmlns:tns="http://www.jemos.co.uk/xsds/protomak/proto-definition" elementFormDefault="qualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.co.uk/xsds/protomak/proto"
+		xmlns:tns="http://www.jemos.co.uk/xsds/protomak/proto" elementFormDefault="qualified">
 
 	<!-- 
 	  This XSD has been created following the .proto Language specifications at the following
