@@ -57,6 +57,21 @@ public class ProtoXsdDefinitionUnitTest {
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_1);
 		proto.getImport().add(ProtomakEngineTestConstants.PROTO_IMPORT_2);
 
+		MessageType msgType = getMessageType(factory);
+
+		MessageType nestedMessageType = getMessageType(factory);
+		nestedMessageType.setName("NestedMessage");
+		msgType.getMessage().add(nestedMessageType);
+
+		proto.setMessage(msgType);
+
+		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
+		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
+		marshaller.marshal(jaxbElement, System.out);
+
+	}
+
+	private MessageType getMessageType(PodamFactory factory) {
 		MessageType msgType = new MessageType();
 		msgType.setName(ProtomakEngineConstants.PROTO_MESSAGE_DEFAULT_NAME);
 
@@ -85,13 +100,7 @@ public class ProtoXsdDefinitionUnitTest {
 			}
 			msgAttributes.add(messageAttributeType);
 		}
-
-		proto.setMessage(msgType);
-
-		proto.setPackage(ProtomakEngineTestConstants.PROTO_PACKAGE);
-		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
-		marshaller.marshal(jaxbElement, System.out);
-
+		return msgType;
 	}
 
 	// ------------------->> Getters / Setters
