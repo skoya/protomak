@@ -18,6 +18,7 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.EnumType;
+import uk.co.jemos.xsds.protomak.proto.ExtensionType;
 import uk.co.jemos.xsds.protomak.proto.KeyValueType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
@@ -60,8 +61,7 @@ public class ProtoXsdDefinitionUnitTest {
 		MessageType msgType = getMessageType(factory);
 
 		MessageType nestedMessageType = getMessageType(factory);
-		nestedMessageType.setName("NestedMessage");
-		msgType.getMessage().add(nestedMessageType);
+		msgType.getNestedMessage().add(nestedMessageType);
 
 		proto.setMessage(msgType);
 
@@ -72,8 +72,8 @@ public class ProtoXsdDefinitionUnitTest {
 	}
 
 	private MessageType getMessageType(PodamFactory factory) {
-		MessageType msgType = new MessageType();
-		msgType.setName(ProtomakEngineConstants.PROTO_MESSAGE_DEFAULT_NAME);
+
+		MessageType msgType = factory.manufacturePojo(MessageType.class);
 
 		List<EnumType> enums = msgType.getEnum();
 		for (int i = 0; i < 5; i++) {
@@ -100,6 +100,10 @@ public class ProtoXsdDefinitionUnitTest {
 			}
 			msgAttributes.add(messageAttributeType);
 		}
+
+		List<ExtensionType> extensions = msgType.getExtensions();
+		extensions.add(factory.manufacturePojo(ExtensionType.class));
+
 		return msgType;
 	}
 

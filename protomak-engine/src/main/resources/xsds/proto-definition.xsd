@@ -72,7 +72,10 @@
 			<element name="enum" type="tns:EnumType"
 				maxOccurs="unbounded" minOccurs="0">
 			</element>
-			<element name="message" type="tns:MessageType" maxOccurs="unbounded" minOccurs="0"></element>
+			<element name="nestedMessage" type="tns:MessageType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="extensions" type="tns:ExtensionType" maxOccurs="unbounded" minOccurs="0"></element>
 		</sequence>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>
@@ -94,5 +97,10 @@
 			<element name="protoType" type="tns:ProtoRuntimeType" ></element>
 			<element name="customType" type="string"></element>
 		</all>
+	</complexType>
+
+	<complexType name="ExtensionType">
+		<attribute name="fromIndex" type="int"></attribute>
+		<attribute name="toIndex" type="int"></attribute>
 	</complexType>
 </schema>
