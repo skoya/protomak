@@ -65,8 +65,7 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 	/**
 	 * {@inheritDoc}
 	 */
-	public MessageType processComplexType(XSType type, boolean isRootMessage)
-			throws ProtomakXsdToProtoConversionError {
+	public MessageType processComplexType(XSType type) throws ProtomakXsdToProtoConversionError {
 
 		//Each proto message has numbered items starting from 1
 		int protoCounter = 1;
@@ -185,7 +184,7 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 					LOG.debug("Found complex type: " + elementType);
 					messageType = XsomDefaultComplexTypeProcessor.getInstance().processComplexType(
-							elementDeclaredType.asComplexType(), false);
+							elementDeclaredType.asComplexType());
 
 				}
 			}
@@ -230,7 +229,7 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 		public void complexType(XSComplexType type) {
 			messageType.getNestedMessage().add(
-					XsomDefaultComplexTypeProcessor.getInstance().processComplexType(type, false));
+					XsomDefaultComplexTypeProcessor.getInstance().processComplexType(type));
 
 		}
 

@@ -27,14 +27,12 @@ public interface XsomComplexTypeProcessor {
 	 * 
 	 * @param complexType
 	 *            The complex type to convert into a message type.
-	 * @param isRootMessage
-	 * 
 	 * @return A {@link MessageType}
 	 * @throws ProtomakXsdToProtoConversionError
 	 *             If an exception occurred while converting a
 	 *             {@link XSComplexType} into a {@link MessageType}
 	 */
-	public MessageType processComplexType(XSType complexType, boolean isRootMessage)
+	public MessageType processComplexType(XSType complexType)
 			throws ProtomakXsdToProtoConversionError;
 
 }

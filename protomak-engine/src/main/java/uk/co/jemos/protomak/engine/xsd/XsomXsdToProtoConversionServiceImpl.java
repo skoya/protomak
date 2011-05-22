@@ -18,15 +18,16 @@ import uk.co.jemos.protomak.engine.api.ConversionService;
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.XsomDefaultComplexTypeProcessor;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
+import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
@@ -97,7 +98,7 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 		}
 
 		ProtoType proto = new ProtoType();
-		List<MessageType> messageList = proto.getMessage();
+		List<MessageType> protoMessages = proto.getMessage();
 
 		XsdToProtoErrorHandler errorHandler = new XsdToProtoErrorHandler();
 		XsdToProtoEntityResolver entityResolver = new XsdToProtoEntityResolver();
@@ -110,40 +111,35 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 		try {
 			parser.parse(inputFilePath);
 			XSSchemaSet sset = parser.getResult();
-			if (null != sset) {
+			if (null == sset) {
+				throw new IllegalStateException(
+						"An error occurred while parsing the schema. Aborting.");
+			}
 
-				//Extracting the root element
-				Iterator<XSElementDecl> elementsIterator = sset.iterateElementDecls();
-				XSElementDecl rootElement = null;
-				if (elementsIterator.hasNext()) {
-					rootElement = elementsIterator.next();
-				} else {
-					throw new IllegalStateException("It appears the schema: " + inputFilePath
-							+ " does not contain a root element");
+			Iterator<XSComplexType> complexTypesIterator = sset.iterateComplexTypes();
+
+			XSComplexType complexType = null;
+
+			String packageName = null;
+
+			while (complexTypesIterator.hasNext()) {
+
+				complexType = complexTypesIterator.next();
+				if (complexType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
+					LOG.debug("Skipping anyType: " + complexType.getName());
+					continue;
+				}
+				if (null == packageName) {
+					packageName = complexType.getTargetNamespace();
+					LOG.info("Proto package will be: " + packageName);
+					proto.setPackage(packageName);
 				}
 
-				XSType rootElementType = rootElement.getType();
-				LOG.info("XSD Schema root element: " + rootElement.getName()
-						+ ". Root element type: " + rootElementType.getName());
+				MessageType messageType = complexTypeProcessor.processComplexType(complexType);
+				LOG.info("Retrieved message type: " + messageType);
+				protoMessages.add(messageType);
+				LOG.info("Proto Type: " + proto);
 
-				MessageType rootMessage = new MessageType();
-
-				boolean isRootMessage = true;
-
-				if (rootElementType.isComplexType()) {
-
-					rootMessage = complexTypeProcessor.processComplexType(
-							rootElementType.asComplexType(), isRootMessage);
-
-					fillRootMessageForComplexType(rootElement, rootMessage);
-
-				}
-
-				messageList.add(rootMessage);
-
-			} else {
-				LOG.warn("No XSOM Schema set could be created from XSD file: " + inputFilePath
-						+ ". Nothing will be done.");
 			}
 
 		} catch (SAXException e) {
