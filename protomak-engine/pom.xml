@@ -135,16 +135,11 @@
 						<descriptor>src/main/assembly/bin.xml</descriptor>
 					</descriptors>
 				</configuration>
-			</plugin>
-			<!-- <plugin> <groupId>org.jvnet.jaxb2.maven2</groupId> <artifactId>maven-jaxb2-plugin</artifactId> 
-				<version>0.7.5</version> <executions> <execution> <goals> <goal>generate</goal> 
-				</goals> </execution> </executions> <configuration> <schemaDirectory>src/main/resources/xsds</schemaDirectory> 
-				<schemaIncludes> <include>**/*.xsd</include> </schemaIncludes> <generatePackage>uk.co.jemos.protomak.engine.generated.xsd</generatePackage> 
-				<readOnly>false</readOnly> </configuration> </plugin> -->
+			</plugin>			
 			<plugin>
-				<groupId>com.sun.tools.xjc.maven2</groupId>
-				<artifactId>maven-jaxb-plugin</artifactId>
-				<version>1.1.1</version>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.7.5</version>
 				<executions>
 					<execution>
 						<goals>
@@ -157,6 +152,20 @@
 					<includeSchemas>
 						<includeSchema>**/*.xsd</includeSchema>
 					</includeSchemas>
+					<extension>true</extension>
+					<args>
+						<arg>-enableIntrospection</arg>
+						<arg>-XtoString</arg>
+						<arg>-Xequals</arg>
+						<arg>-XhashCode</arg>
+					</args>
+					<plugins>
+						<plugin>
+							<groupId>org.jvnet.jaxb2_commons</groupId>
+							<artifactId>jaxb2-basics</artifactId>
+							<version>0.6.1</version>
+						</plugin>
+					</plugins>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -184,6 +193,17 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-testing</artifactId>
+			<version>0.6.0</version>
+			<scope>test</scope>
 		</dependency>
 
 
@@ -241,7 +261,7 @@
 					<footer>Jemos 2002 - 2011: All Rights Reserved. protomak runs under
 						the MIT license</footer>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</reporting>
 
