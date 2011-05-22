@@ -23,6 +23,12 @@ public class ProtomakEngineConstants {
 	/** The default name for a proto message */
 	public static final String PROTO_MESSAGE_DEFAULT_NAME = "DefaultMessage";
 
+	/** The extension for proto files. */
+	public static final String PROTO_FILE_EXTENSION_NAME = ".proto";
+
+	/** The name of the first complex type returned by XSOM iteration. */
+	public static final Object ANY_TYPE_NAME = "anyType";
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();
