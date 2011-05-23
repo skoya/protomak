@@ -53,14 +53,37 @@
 			<id>mtedone</id>
 			<name>Marco Tedone</name>
 			<email>marco.tedone@gmail.com</email>
-			<organization>Jemos</organization>
-			<organizationUrl>http://www.jemos.co.uk</organizationUrl>
+			<organization>UBS</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
 			<roles>
-				<role>Project Lead</role>
+				<role>Project Founder</role>
+				<role>Team Member</role>
 			</roles>
 			<timezone>UTC</timezone>
 			<url>http://tedone.typepad.com/blog/</url>
 		</developer>
+		<developer>
+			<id>paulwhitby</id>
+			<name>Paul Whitby</name>
+			<email>paulwhitby@btconnect.com</email>
+			<organization>UBS</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>			
+		</developer>		
+		<developer>
+			<id>sharatkoya</id>
+			<name>Sharat Koya</name>
+			<email>sharat.koya@me.com</email>
+			<organization>UBS</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>			
+		</developer>		
 	</developers>
 
 	<properties>
