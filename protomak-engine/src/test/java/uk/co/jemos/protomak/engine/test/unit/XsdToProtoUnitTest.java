@@ -65,12 +65,6 @@ public class XsdToProtoUnitTest {
 		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
 				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
 
-		//		File[] protoFiles = protosOutputDir.listFiles(filter);
-		//		Assert.assertNotNull("There should be at least one proto file in folder: "
-		//				+ protosOutputDir, protoFiles);
-		//		Assert.assertTrue("There should be at least one proto file in folder: " + protosOutputDir,
-		//				protoFiles.length > 0);
-
 	}
 	// ------------------->> Getters / Setters
 

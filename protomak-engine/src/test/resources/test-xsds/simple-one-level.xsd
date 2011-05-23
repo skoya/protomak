@@ -14,7 +14,5 @@
     		<element name="client" type="tns:ClientType" maxOccurs="unbounded" minOccurs="1"></element>
     	</sequence>
     </complexType>
-
-
-    <element name="clients" type="tns:ClientsType"></element>
+    
 </schema>
