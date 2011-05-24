@@ -32,6 +32,9 @@ public class ProtomakEngineTestConstants {
 	/** The path to one-simple-single-element.xsd */
 	public static final String SIMPLE_SINGLE_ELEMENT_XSD_PATH = "src/test/resources/test-xsds/one-simple-single-element.xsd";
 
+	/** The path to multiple-simple-elements.xsd */
+	public static final String SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH = "src/test/resources/test-xsds/multiple-simple-elements.xsd";
+
 	/** Non instantiable constructor */
 	private ProtomakEngineTestConstants() {
 	}

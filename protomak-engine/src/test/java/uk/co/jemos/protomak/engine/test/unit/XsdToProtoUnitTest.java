@@ -67,6 +67,19 @@ public class XsdToProtoUnitTest {
 	}
 
 	@Test
+	public void testSimpleMultipleElementsXsd() {
+
+		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		//TODO To test that .proto files exist in output folder
+
+	}
+
+	@Test
 	public void testSimpleOneLevelXsd() {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH,

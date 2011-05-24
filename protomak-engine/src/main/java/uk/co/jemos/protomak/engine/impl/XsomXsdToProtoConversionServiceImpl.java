@@ -193,7 +193,7 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
 			MessageAttributeType msgAttrType = new MessageAttributeType();
 			msgAttrType.setName(element.getName());
-			msgAttrType.setIndex(defaultMessageIdx);
+			msgAttrType.setIndex(1);//Always one attribute per element
 			//For single elements it appears there are no other options than required
 			msgAttrType.setOptionality(MessageAttributeOptionalType.REQUIRED);
 			XSType elementType = element.getType();
