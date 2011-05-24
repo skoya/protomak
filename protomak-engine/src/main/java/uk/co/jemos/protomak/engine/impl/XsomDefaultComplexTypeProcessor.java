@@ -173,19 +173,29 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 		}
 
-		public void elementDecl(XSElementDecl decl) {
+		public void elementDecl(XSElementDecl element) {
 
-			String elementType = decl.getType().getName();
+			String elementType = element.getType().getName();
 
-			XSType elementDeclaredType = decl.getOwnerSchema().getType(elementType);
-			if (null != elementDeclaredType) {
+			if (element.getType().isSimpleType()) {
 
-				if (elementDeclaredType.isComplexType()) {
+				messageType.getMsgAttribute().add(
+						ProtomakEngineHelper.getMessageTypeForElement(element, 1));
 
-					LOG.debug("Found complex type: " + elementType);
-					messageType = XsomDefaultComplexTypeProcessor.getInstance().processComplexType(
-							elementDeclaredType.asComplexType());
+			} else {
 
+				//We assume the complex type is declared within the schema. This probably 
+				//needs to change if the complex type is declared externally
+				XSType elementDeclaredType = element.getOwnerSchema().getType(elementType);
+				if (null != elementDeclaredType) {
+
+					if (elementDeclaredType.isComplexType()) {
+
+						LOG.debug("Found complex type: " + elementType);
+						messageType = XsomDefaultComplexTypeProcessor.getInstance()
+								.processComplexType(elementDeclaredType.asComplexType());
+
+					}
 				}
 			}
 

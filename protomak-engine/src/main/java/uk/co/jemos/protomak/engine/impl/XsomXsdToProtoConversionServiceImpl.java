@@ -19,17 +19,13 @@ import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
-import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
-import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
-import uk.co.jemos.xsds.protomak.proto.ProtoRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
@@ -160,6 +156,7 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 				continue;
 			}
 			if (null == packageName) {
+				//FIXME Transform package name in proto package name
 				packageName = complexType.getTargetNamespace();
 				LOG.info("Proto package will be: " + packageName);
 				proto.setPackage(packageName);
@@ -185,33 +182,16 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	private void manageElements(ProtoType proto, XSSchemaSet schema) {
 		//Iterates over the elements
 		Iterator<XSElementDecl> declaredElementsIterator = schema.iterateElementDecls();
-		int defaultMessageIdx = 1;
+		int messageSuffix = 1;
 		while (declaredElementsIterator.hasNext()) {
-			XSElementDecl element = declaredElementsIterator.next();
 			MessageType msgType = new MessageType();
-			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + defaultMessageIdx);
+			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + messageSuffix);
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
-			MessageAttributeType msgAttrType = new MessageAttributeType();
-			msgAttrType.setName(element.getName());
-			msgAttrType.setIndex(1);//Always one attribute per element
-			//For single elements it appears there are no other options than required
-			msgAttrType.setOptionality(MessageAttributeOptionalType.REQUIRED);
-			XSType elementType = element.getType();
-			MessageRuntimeType runtimeType = new MessageRuntimeType();
-			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
-					.get(elementType.getName());
-			if (null == protoRuntimeType) {
-				throw new IllegalStateException(
-						"For the XSD type: "
-								+ elementType.getName()
-								+ " no mapping could be found in ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING");
-			}
-
-			runtimeType.setProtoType(protoRuntimeType);
-			msgAttrType.setRuntimeType(runtimeType);
+			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageTypeForElement(
+					declaredElementsIterator.next(), messageSuffix);
 			msgAttributes.add(msgAttrType);
 
-			defaultMessageIdx++;
+			messageSuffix++;
 
 			proto.getMessage().add(msgType);
 		}

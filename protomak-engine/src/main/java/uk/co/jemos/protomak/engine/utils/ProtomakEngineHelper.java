@@ -9,10 +9,13 @@ import java.util.Map;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
+import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ProtoRuntimeType;
 
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
+import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSType;
 
 /**
  * Helper class for Protomak Engine.
@@ -93,6 +96,46 @@ public class ProtomakEngineHelper {
 		retValue.setIndex(protoCounter);
 
 		return retValue;
+	}
+
+	/**
+	 * Given an XSD element declaration it manufactures and returns a
+	 * {@link MessageAttributeType}.
+	 * 
+	 * @param element
+	 *            The XSD element
+	 * @param messageSuffix
+	 *            The messageSuffix
+	 * @return A {@link MessageType}
+	 */
+	public static MessageAttributeType getMessageTypeForElement(XSElementDecl element,
+			int messageSuffix) {
+
+		MessageAttributeType msgAttrType = new MessageAttributeType();
+		msgAttrType.setName(element.getName());
+		msgAttrType.setIndex(1);//Always one attribute per element
+		//For single elements it appears there are no other options than required
+		msgAttrType.setOptionality(MessageAttributeOptionalType.REQUIRED);
+		XSType elementType = element.getType();
+		MessageRuntimeType runtimeType = new MessageRuntimeType();
+		if (elementType.isSimpleType()) {
+			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
+					.get(elementType.getName());
+			if (null == protoRuntimeType) {
+				throw new IllegalStateException(
+						"For the XSD type: "
+								+ elementType.getName()
+								+ " no mapping could be found in ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING");
+			}
+
+			runtimeType.setProtoType(protoRuntimeType);
+		} else {
+			runtimeType.setCustomType(elementType.getName());
+		}
+
+		msgAttrType.setRuntimeType(runtimeType);
+
+		return msgAttrType;
 	}
 
 	// ------------------->> Getters / Setters
