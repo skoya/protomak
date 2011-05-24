@@ -253,7 +253,7 @@
 			<artifactId>easymock</artifactId>
 			<version>3.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>			
 		<dependency>
 			<groupId>uk.co.jemos.podam</groupId>
 			<artifactId>podam</artifactId>
@@ -301,4 +301,5 @@
 
 
 </project>
+
 
