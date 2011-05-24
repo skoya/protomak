@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.jemos.protomak.engine.xsd;
+package uk.co.jemos.protomak.engine.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,17 +17,19 @@ import org.xml.sax.SAXParseException;
 import uk.co.jemos.protomak.engine.api.ConversionService;
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
-import uk.co.jemos.protomak.engine.impl.XsomDefaultComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
+import uk.co.jemos.xsds.protomak.proto.ProtoRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
@@ -98,7 +100,6 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 		}
 
 		ProtoType proto = new ProtoType();
-		List<MessageType> protoMessages = proto.getMessage();
 
 		XsdToProtoErrorHandler errorHandler = new XsdToProtoErrorHandler();
 		XsdToProtoEntityResolver entityResolver = new XsdToProtoEntityResolver();
@@ -116,31 +117,9 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 						"An error occurred while parsing the schema. Aborting.");
 			}
 
-			Iterator<XSComplexType> complexTypesIterator = sset.iterateComplexTypes();
+			manageComplexTypes(proto, sset);
 
-			XSComplexType complexType = null;
-
-			String packageName = null;
-
-			while (complexTypesIterator.hasNext()) {
-
-				complexType = complexTypesIterator.next();
-				if (complexType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
-					LOG.debug("Skipping anyType: " + complexType.getName());
-					continue;
-				}
-				if (null == packageName) {
-					packageName = complexType.getTargetNamespace();
-					LOG.info("Proto package will be: " + packageName);
-					proto.setPackage(packageName);
-				}
-
-				MessageType messageType = complexTypeProcessor.processComplexType(complexType);
-				LOG.info("Retrieved message type: " + messageType);
-				protoMessages.add(messageType);
-				LOG.info("Proto Type: " + proto);
-
-			}
+			manageElements(proto, sset);
 
 		} catch (SAXException e) {
 			throw new ProtomakXsdToProtoConversionError(e);
@@ -155,33 +134,99 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	//------------------->> Private methods
 
 	/**
-	 * It fills and returns the root {@link MessageType}
+	 * It goes through all complex types in the XSD and for each one it creates
+	 * a message in proto.
 	 * 
-	 * @param rootElement
-	 *            The type of the root element
-	 * @param rootMessage
-	 *            The root {@link MessageType}
-	 * @param nestedMessageType
-	 *            The nested {@link MessageType} if any.
+	 * @param proto
+	 *            The proto object
+	 * @param schema
+	 *            The representation of the XSD Schema
 	 */
-	private void fillRootMessageForComplexType(XSElementDecl rootElement, MessageType rootMessage) {
+	private void manageComplexTypes(ProtoType proto, XSSchemaSet schema) {
 
-		rootMessage.setName(rootElement.getType().getName());
-		MessageAttributeType rootMessageAttributeType = new MessageAttributeType();
-		rootMessageAttributeType.setName(rootElement.getName());
-		rootMessageAttributeType.setIndex(1);
-		rootMessageAttributeType.setOptionality(MessageAttributeOptionalType.REQUIRED);
+		List<MessageType> protoMessages = proto.getMessage();
 
-		MessageRuntimeType runtimeType = new MessageRuntimeType();
-		runtimeType.setCustomType(rootElement.getType().getName());
-		rootMessageAttributeType.setRuntimeType(runtimeType);
-		rootMessage.getMsgAttribute().add(rootMessageAttributeType);
+		Iterator<XSComplexType> complexTypesIterator = schema.iterateComplexTypes();
+
+		XSComplexType complexType = null;
+
+		String packageName = null;
+
+		while (complexTypesIterator.hasNext()) {
+
+			complexType = complexTypesIterator.next();
+			if (complexType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
+				LOG.debug("Skipping anyType: " + complexType.getName());
+				continue;
+			}
+			if (null == packageName) {
+				packageName = complexType.getTargetNamespace();
+				LOG.info("Proto package will be: " + packageName);
+				proto.setPackage(packageName);
+			}
+
+			MessageType messageType = complexTypeProcessor.processComplexType(complexType);
+			LOG.info("Retrieved message type: " + messageType);
+			protoMessages.add(messageType);
+			LOG.info("Proto Type: " + proto);
+
+		}
+	}
+
+	/**
+	 * It goes through all elements defined in the XSD and for each one it
+	 * creates a default message.
+	 * 
+	 * @param proto
+	 *            The root proto object
+	 * @param schema
+	 *            The XSD schema representation
+	 */
+	private void manageElements(ProtoType proto, XSSchemaSet schema) {
+		//Iterates over the elements
+		Iterator<XSElementDecl> declaredElementsIterator = schema.iterateElementDecls();
+		int defaultMessageIdx = 1;
+		while (declaredElementsIterator.hasNext()) {
+			XSElementDecl element = declaredElementsIterator.next();
+			MessageType msgType = new MessageType();
+			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + defaultMessageIdx);
+			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
+			MessageAttributeType msgAttrType = new MessageAttributeType();
+			msgAttrType.setName(element.getName());
+			msgAttrType.setIndex(defaultMessageIdx);
+			//For single elements it appears there are no other options than required
+			msgAttrType.setOptionality(MessageAttributeOptionalType.REQUIRED);
+			XSType elementType = element.getType();
+			MessageRuntimeType runtimeType = new MessageRuntimeType();
+			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
+					.get(elementType.getName());
+			if (null == protoRuntimeType) {
+				throw new IllegalStateException(
+						"For the XSD type: "
+								+ elementType.getName()
+								+ " no mapping could be found in ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING");
+			}
+
+			runtimeType.setProtoType(protoRuntimeType);
+			msgAttrType.setRuntimeType(runtimeType);
+			msgAttributes.add(msgAttrType);
+
+			defaultMessageIdx++;
+
+			proto.getMessage().add(msgType);
+		}
 	}
 
 	//------------------->> equals() / hashcode() / toString()
 
 	//------------------->> Inner classes
 
+	/**
+	 * It handles Schema parsing errors.
+	 * 
+	 * @author mtedone
+	 * 
+	 */
 	private static class XsdToProtoErrorHandler implements ErrorHandler {
 
 		public void warning(SAXParseException exception) throws SAXException {
@@ -202,6 +247,12 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 
 	}
 
+	/**
+	 * It manages entity resolution.
+	 * 
+	 * @author mtedone
+	 * 
+	 */
 	private static class XsdToProtoEntityResolver implements EntityResolver {
 
 		public InputSource resolveEntity(String publicId, String systemId) throws SAXException,

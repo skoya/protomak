@@ -29,6 +29,14 @@ public class ProtomakEngineConstants {
 	/** The name of the first complex type returned by XSOM iteration. */
 	public static final Object ANY_TYPE_NAME = "anyType";
 
+	/**
+	 * The prefix for a default message name in the proto file.
+	 * <p>
+	 * This constant is used for simple elements defined in an XSD.
+	 * </p>
+	 */
+	public static final String DEFAULT_MESSAGE_NAME = "DefaultMessage";
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();

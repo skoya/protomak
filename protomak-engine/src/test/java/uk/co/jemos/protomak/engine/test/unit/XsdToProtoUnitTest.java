@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.jemos.protomak.engine.api.ConversionService;
+import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
-import uk.co.jemos.protomak.engine.xsd.XsomXsdToProtoConversionServiceImpl;
 
 /**
  * Unit Tests for the conversion of XSDs to Proto files.
@@ -56,7 +56,18 @@ public class XsdToProtoUnitTest {
 	}
 
 	@Test
-	public void testSimpleOneLevelConversion() {
+	public void testSimpleSingleElementXsd() {
+		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		//TODO To test that .proto files exist in output folder
+	}
+
+	@Test
+	public void testSimpleOneLevelXsd() {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
@@ -64,6 +75,8 @@ public class XsdToProtoUnitTest {
 		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
 				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		//TODO To test that .proto files exist in output folder
 
 	}
 	// ------------------->> Getters / Setters

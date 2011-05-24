@@ -69,7 +69,6 @@
 		</attribute>
 		<attribute name="name" type="string" use="required"></attribute>
 		<attribute name="index" type="int" use="required"></attribute>
-		<attribute name="comments" type="string" use="optional"></attribute>
 		<attribute name="defaultValue" type="string" use="optional"></attribute>
 	</complexType>
 
