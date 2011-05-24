@@ -53,10 +53,10 @@
 			<id>mtedone</id>
 			<name>Marco Tedone</name>
 			<email>marco.tedone@gmail.com</email>
-			<organization>UBS</organization>
+			<organization>Jemos</organization>
 			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
 			<roles>
-				<role>Project Founder</role>
+				<role>Project Lead</role>
 				<role>Team Member</role>
 			</roles>
 			<timezone>UTC</timezone>
@@ -66,7 +66,7 @@
 			<id>paulwhitby</id>
 			<name>Paul Whitby</name>
 			<email>paulwhitby@btconnect.com</email>
-			<organization>UBS</organization>
+			<organization>Jemos</organization>
 			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
 			<roles>
 				<role>Team Member</role>
@@ -77,13 +77,24 @@
 			<id>sharatkoya</id>
 			<name>Sharat Koya</name>
 			<email>sharat.koya@me.com</email>
-			<organization>UBS</organization>
+			<organization>Jemos</organization>
 			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
 			<roles>
 				<role>Team Member</role>
 			</roles>
 			<timezone>UTC</timezone>			
-		</developer>		
+		</developer>	
+		<developer>
+			<id>edwilde</id>
+			<name>Ed Wilde</name>
+			<email>TBD</email>
+			<organization>Jemos</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>			
+		</developer>				
 	</developers>
 
 	<properties>
