@@ -138,6 +138,30 @@ public class ProtomakEngineHelper {
 		return msgAttrType;
 	}
 
+	/**
+	 * Given an input XSD file name it returns the same file with the proto
+	 * extension.
+	 * 
+	 * </p> If the file name has got an invalid format (e.g. it does not end
+	 * with a {@code .extension} this method returns a default value </p>
+	 * 
+	 * @param inputPath
+	 *            The XSD input file name
+	 * @return The proto file name
+	 */
+	public static String extractProtoFileNameFromXsdName(String inputPath) {
+
+		String retValue = ProtomakEngineConstants.DEFAULT_PROTO_FILE_NAME;
+
+		int idx = inputPath.lastIndexOf(".");
+		if (idx >= 0) {
+			String fileName = inputPath.substring(0, idx);
+			retValue = fileName + ProtomakEngineConstants.PROTO_FILE_EXTENSION_NAME;
+		}
+
+		return retValue;
+	}
+
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods

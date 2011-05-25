@@ -37,6 +37,21 @@ public class ProtomakEngineConstants {
 	 */
 	public static final String DEFAULT_MESSAGE_NAME = "DefaultMessage";
 
+	/** The suffix for a proto file */
+	public static final String PROTO_SUFFIX = ".proto";
+
+	/** The Token {@code message} within a proto file */
+	public static final String PROTO_TOKENS_MESSAGE = "message";
+
+	/** A blank space */
+	public static final String BLANK_SPACE = " ";
+
+	/** The default proto file name */
+	public static final String DEFAULT_PROTO_FILE_NAME = "default.proto";
+
+	/** An OS system independent new line */
+	public static final String NEW_LINE = System.getProperty("line.separator");;
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();

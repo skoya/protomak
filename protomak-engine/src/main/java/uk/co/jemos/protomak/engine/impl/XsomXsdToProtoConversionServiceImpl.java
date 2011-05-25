@@ -15,7 +15,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import uk.co.jemos.protomak.engine.api.ConversionService;
+import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
+import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
@@ -49,7 +51,11 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 
 	//------------------->> Instance / Static variables
 
+	/** The processor for complex types */
 	private final XsomComplexTypeProcessor complexTypeProcessor;
+
+	/** The proto serialisation service */
+	private final ProtoSerialisationService protoSerialisationService;
 
 	//------------------->> Constructors
 
@@ -57,7 +63,8 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	 * Default constructor.
 	 */
 	public XsomXsdToProtoConversionServiceImpl() {
-		this(XsomDefaultComplexTypeProcessor.getInstance());
+		this(XsomDefaultComplexTypeProcessor.getInstance(), PojoToProtoSerialisationServiceImpl
+				.getInstance());
 	}
 
 	/**
@@ -65,10 +72,15 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	 * 
 	 * @param complexTypeProcessor
 	 *            The complex type processor
+	 * 
+	 * @param protoSerialisationService
+	 *            The proto serialisation service.
 	 */
-	public XsomXsdToProtoConversionServiceImpl(XsomComplexTypeProcessor complexTypeProcessor) {
+	public XsomXsdToProtoConversionServiceImpl(XsomComplexTypeProcessor complexTypeProcessor,
+			ProtoSerialisationService protoSerialisationService) {
 		super();
 		this.complexTypeProcessor = complexTypeProcessor;
+		this.protoSerialisationService = protoSerialisationService;
 	}
 
 	//------------------->> Public methods
@@ -78,6 +90,12 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the {@code inputPath} does not exist.
+	 * @throws ProtomakXsdToProtoConversionError
+	 *             If an error occured while parsing the file
+	 * 
+	 * @throws ProtomakEngineSerialisationError
+	 *             If an error occurred while serialisation the
+	 *             {@link ProtoType} to an output destination.
 	 */
 	public void generateProtoFiles(String inputPath, String outputPath) {
 
@@ -87,12 +105,6 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 					+ " does not exist. Throwing an exception.";
 			LOG.error(errMsg);
 			throw new IllegalArgumentException(errMsg);
-		}
-
-		File protosOutputFolder = new File(outputPath);
-		if (!protosOutputFolder.exists()) {
-			LOG.info("Output folder: " + outputPath + " does not exist. Creating it.");
-			protosOutputFolder.mkdirs();
 		}
 
 		ProtoType proto = new ProtoType();
@@ -113,9 +125,17 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 						"An error occurred while parsing the schema. Aborting.");
 			}
 
+			LOG.info("Processing all complex types in the XSD...");
 			manageComplexTypes(proto, sset);
 
+			LOG.info("Processing all elements in the XSD...");
 			manageElements(proto, sset);
+
+			String protoFileName = ProtomakEngineHelper
+					.extractProtoFileNameFromXsdName(inputFilePath.getName());
+
+			protoSerialisationService.writeProtoFile(protoFileName, outputPath, proto);
+			LOG.info("Proto file: " + protoFileName + " written to " + outputPath);
 
 		} catch (SAXException e) {
 			throw new ProtomakXsdToProtoConversionError(e);

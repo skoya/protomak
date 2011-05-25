@@ -52,16 +52,16 @@ public class XsdToProtoUnitTest {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.NON_EXISTING_FILE_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-
 	}
 
 	@Test
 	public void testSimpleSingleElementXsd() {
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
-				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir);
 
 		//TODO To test that .proto files exist in output folder
 	}
@@ -71,9 +71,10 @@ public class XsdToProtoUnitTest {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
-				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir);
 
 		//TODO To test that .proto files exist in output folder
 
@@ -84,9 +85,10 @@ public class XsdToProtoUnitTest {
 		service.generateProtoFiles(
 				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
-				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir);
 
 		//TODO To test that .proto files exist in output folder
 	}
@@ -97,16 +99,32 @@ public class XsdToProtoUnitTest {
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File protosOutputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-		Assert.assertTrue("The output folder: " + ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
-				+ " should exist!", protosOutputDir.exists() && protosOutputDir.isDirectory());
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir);
 
 		//TODO To test that .proto files exist in output folder
 
 	}
+
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods
+
+	/**
+	 * It verifies that the output folder has been created and at least one
+	 * proto file has been written to it.
+	 * 
+	 * @param outputDir2
+	 */
+	private void verifyProtoFilesHaveBeenWritten(File outputDir) {
+		Assert.assertTrue("The output folder must exist!", outputDir.exists());
+		Assert.assertTrue("The output folder must be a folder!", outputDir.isDirectory());
+		File[] listFiles = outputDir.listFiles(filter);
+		Assert.assertNotNull("The list of proto files cannot be null!", listFiles);
+		Assert.assertTrue("There must be at least a .proto file in the output folder",
+				listFiles.length > 0);
+	}
 
 	//------------------->> equals() / hashcode() / toString()
 
