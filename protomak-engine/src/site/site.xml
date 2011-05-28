@@ -54,11 +54,7 @@
       	<item name="Known Limitations" href="./known_limitations.html" />	
       	<item name="FAQS" href="./faqs.html" />
       	<item name="Release Notes" href="./release-notes/release-notes.html" />
-      </menu>
-      
-	  <menu name="Metrics">      	
-      	<item name="Code Coverage" href="./emma/index.html" />
-      </menu>      
+      </menu> 
       
       <menu ref="reports" />
       
