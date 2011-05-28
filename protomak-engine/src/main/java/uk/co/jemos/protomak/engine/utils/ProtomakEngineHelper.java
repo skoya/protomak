@@ -171,9 +171,10 @@ public class ProtomakEngineHelper {
 	/**
 	 * Given a target name space, it returns a proto package.
 	 * <p>
-	 * This method converts links in the form of
-	 * {@code http://www.jemos.eu/simple-one-level} to a proto package form of
-	 * {@code simple-one-level.eu.jemos.www}.
+	 * This method converts an XSD target namespace to a proto package name,
+	 * following the rules specified <a href=
+	 * "http://download.oracle.com/javase/tutorial/java/package/namingpkgs.html"
+	 * >here</a>
 	 * </p>
 	 * 
 	 * <p>
@@ -184,24 +185,33 @@ public class ProtomakEngineHelper {
 	 * </p>
 	 * 
 	 * <p>
-	 * Generally, forward slashes will be replaced by dots. E.g. for a Target NS
-	 * foo/bar/baz the returned package name will be foo.bar.baz (but it will
-	 * not have a proper reversed order, unless it is defined with the HTTP
-	 * schema protocol).
 	 * </p>
+	 * 
+	 * <p>
+	 * Generally: <br/>
+	 * <ul>
+	 * <li>Forward slashes will be replaced by dots</li>
+	 * <li>Hyphens will be replaced by underscores</li>
+	 * <li>The server part of a URI, when present, will be reversed. So
+	 * www.jemos.eu will be written as eu.jemos.www</li>
+	 * </ul>
+	 * </p>
+	 * 
+	 * 
 	 * 
 	 * @param targetNameSpace
 	 *            A target name space to convert into a proto package name.
 	 * @return A package name in proto format.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If the {@code targetNameSpace} is null.
+	 *             If the target name space is null or it violates naming
+	 *             standards
 	 */
 	public static String convertTargetNsToProtoPackageName(String targetNameSpace) {
 
-		if (null == targetNameSpace || "".equals(targetNameSpace)) {
-			throw new IllegalArgumentException("Target name space cannot be null or empty");
-		}
+		validatePackageName(targetNameSpace);
+
+		targetNameSpace = targetNameSpace.toLowerCase().trim();
 
 		List<String> packageNameTokens = new ArrayList<String>();
 
@@ -228,8 +238,11 @@ public class ProtomakEngineHelper {
 		LOG.debug("After removing protocol, target ns is: " + targetNameSpace);
 
 		String[] packageTokens = targetNameSpace.split("/");
+		String packageToken = null;
 		for (int i = packageTokens.length - 1; i >= 0; i--) {
-			packageNameTokens.add(0, packageTokens[i]);
+			packageToken = packageTokens[i];
+			packageToken = packageToken.replace('-', '_');
+			packageNameTokens.add(0, packageToken);
 		}
 
 		for (int i = 0; i < packageNameTokens.size(); i++) {
@@ -243,7 +256,51 @@ public class ProtomakEngineHelper {
 		return buff.toString();
 
 	}
+
 	// ------------------->> Getters / Setters
+
+	/**
+	 * It validates the package name and throws an exception if the package name
+	 * violates the standards.
+	 * 
+	 * @param targetNameSpace
+	 *            The package name to validate
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the package name does not adhere to standard naming
+	 *             conventions, as specified <a href=
+	 *             "http://download.oracle.com/javase/tutorial/java/package/namingpkgs.html"
+	 *             >here</a>
+	 */
+	private static void validatePackageName(String targetNameSpace) {
+
+		String errMsg = null;
+
+		if (null == targetNameSpace || "".equals(targetNameSpace)) {
+			errMsg = "Target name space cannot be null or empty";
+			LOG.error(errMsg);
+			throw new IllegalArgumentException(errMsg);
+		}
+
+		if (targetNameSpace.startsWith(".")) {
+			errMsg = "The target name space " + targetNameSpace + " cannot start with a dot (.)";
+			LOG.error(errMsg);
+			throw new IllegalArgumentException(errMsg);
+		}
+
+		if (targetNameSpace.endsWith(".")) {
+			errMsg = "The target name space " + targetNameSpace + " cannot end with a dot (.)";
+			LOG.error(errMsg);
+			throw new IllegalArgumentException(errMsg);
+		}
+
+		if (Character.isDigit(targetNameSpace.charAt(0))) {
+			errMsg = "The target name space: " + targetNameSpace + " cannot start with a digit";
+			LOG.error(errMsg);
+			throw new IllegalArgumentException(errMsg);
+		}
+
+	}
 
 	//------------------->> Private methods
 

@@ -41,6 +41,9 @@ public class ProtomakEngineTestConstants {
 	/** A target name space which contains HTTP as prefix */
 	public static final String TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX = "http://www.jemos.eu/simple-one-level";
 
+	/** A target name space which contains HTTP as prefix */
+	public static final String TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX_AND_SOME_UPPERCASE = "http://wWw.JEMOS.eu/FOO";
+
 	/**
 	 * The path to public static final String
 	 * SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH = null;
