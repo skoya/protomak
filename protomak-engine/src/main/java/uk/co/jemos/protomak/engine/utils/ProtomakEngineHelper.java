@@ -183,6 +183,13 @@ public class ProtomakEngineHelper {
 	 * >online</a>
 	 * </p>
 	 * 
+	 * <p>
+	 * Generally, forward slashes will be replaced by dots. E.g. for a Target NS
+	 * foo/bar/baz the returned package name will be foo.bar.baz (but it will
+	 * not have a proper reversed order, unless it is defined with the HTTP
+	 * schema protocol).
+	 * </p>
+	 * 
 	 * @param targetNameSpace
 	 *            A target name space to convert into a proto package name.
 	 * @return A package name in proto format.
@@ -216,10 +223,6 @@ public class ProtomakEngineHelper {
 				targetNameSpace = targetNameSpace.substring(serverTokenIdx + 1);
 			}
 
-		} else if (targetNameSpace.startsWith(ProtomakEngineConstants.FILE_PREFIX)) {
-			targetNameSpace = targetNameSpace.substring(targetNameSpace
-					.indexOf(ProtomakEngineConstants.FILE_PREFIX)
-					+ ProtomakEngineConstants.FILE_PREFIX.length());
 		}
 
 		LOG.debug("After removing protocol, target ns is: " + targetNameSpace);
@@ -236,6 +239,7 @@ public class ProtomakEngineHelper {
 			}
 		}
 
+		LOG.info("Returning target namespace: " + buff.toString());
 		return buff.toString();
 
 	}
