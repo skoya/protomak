@@ -27,6 +27,7 @@ import uk.co.jemos.protomak.engine.impl.PojoToProtoSerialisationServiceImpl;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 import com.sun.xml.xsom.parser.XSOMParser;
@@ -130,7 +131,8 @@ public class XsdToProtoUnitTest {
 
 		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		verifyProtoFilesHaveBeenWritten(outputDir);
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH);
 
 	}
 
@@ -142,7 +144,8 @@ public class XsdToProtoUnitTest {
 
 		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		verifyProtoFilesHaveBeenWritten(outputDir);
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH);
 
 	}
 
@@ -154,7 +157,8 @@ public class XsdToProtoUnitTest {
 
 		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		verifyProtoFilesHaveBeenWritten(outputDir);
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH);
 
 	}
 
@@ -166,7 +170,8 @@ public class XsdToProtoUnitTest {
 
 		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		verifyProtoFilesHaveBeenWritten(outputDir);
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH);
 
 	}
 
@@ -220,9 +225,11 @@ public class XsdToProtoUnitTest {
 	 * It verifies that the output folder has been created and at least one
 	 * proto file has been written to it.
 	 * 
+	 * @param simpleSingleElementXsdPath
+	 * 
 	 * @param outputDir2
 	 */
-	private void verifyProtoFilesHaveBeenWritten(File outputDir) {
+	private void verifyProtoFilesHaveBeenWritten(File outputDir, String inputFilePath) {
 
 		Assert.assertTrue("The output folder must exist!", outputDir.exists());
 		Assert.assertTrue("The output folder must be a folder!", outputDir.isDirectory());
@@ -230,6 +237,17 @@ public class XsdToProtoUnitTest {
 		Assert.assertNotNull("The list of proto files cannot be null!", listFiles);
 		Assert.assertTrue("There must be at least a .proto file in the output folder",
 				listFiles.length > 0);
+
+		File inputFile = new File(inputFilePath);
+
+		String protoFileName = ProtomakEngineHelper.extractProtoFileNameFromXsdName(inputFile
+				.getName());
+
+		File protoFile = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+				+ File.separatorChar + protoFileName);
+		Assert.assertTrue("The file: " + protoFile.getAbsolutePath() + " does not exist.",
+				protoFile.exists());
+
 	}
 
 	//------------------->> equals() / hashcode() / toString()
