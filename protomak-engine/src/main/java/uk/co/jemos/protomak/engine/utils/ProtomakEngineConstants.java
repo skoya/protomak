@@ -50,7 +50,13 @@ public class ProtomakEngineConstants {
 	public static final String DEFAULT_PROTO_FILE_NAME = "default.proto";
 
 	/** An OS system independent new line */
-	public static final String NEW_LINE = System.getProperty("line.separator");;
+	public static final String NEW_LINE = System.getProperty("line.separator");
+
+	/** The HTTP protocol prefix */
+	public static final String HTTP_PREFIX = "http://";
+
+	/** The file protocol prefix */
+	public static final String FILE_PREFIX = "file:///";
 
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {

@@ -3,7 +3,9 @@
  */
 package uk.co.jemos.protomak.engine.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
@@ -26,6 +28,10 @@ import com.sun.xml.xsom.XSType;
 public class ProtomakEngineHelper {
 
 	//------------------->> Constants
+
+	/** The application logger. */
+	public static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger
+			.getLogger(ProtomakEngineHelper.class);
 
 	//------------------->> Instance / Static variables
 
@@ -190,11 +196,49 @@ public class ProtomakEngineHelper {
 			throw new IllegalArgumentException("Target name space cannot be null or empty");
 		}
 
-		String retValue = null;
+		List<String> packageNameTokens = new ArrayList<String>();
 
-		return retValue;
+		StringBuilder buff = new StringBuilder();
+
+		if (targetNameSpace.startsWith(ProtomakEngineConstants.HTTP_PREFIX)) {
+			targetNameSpace = targetNameSpace.substring(targetNameSpace
+					.indexOf(ProtomakEngineConstants.HTTP_PREFIX)
+					+ ProtomakEngineConstants.HTTP_PREFIX.length());
+
+			int serverTokenIdx = targetNameSpace.indexOf("/");
+			if (serverTokenIdx >= 0) {
+				String serverToken = targetNameSpace.substring(0, serverTokenIdx);
+				String[] serverTokenParts = serverToken.split("\\.");
+				for (int i = serverTokenParts.length - 1; i >= 0; i--) {
+					packageNameTokens.add(serverTokenParts[i]);
+				}
+
+				targetNameSpace = targetNameSpace.substring(serverTokenIdx + 1);
+			}
+
+		} else if (targetNameSpace.startsWith(ProtomakEngineConstants.FILE_PREFIX)) {
+			targetNameSpace = targetNameSpace.substring(targetNameSpace
+					.indexOf(ProtomakEngineConstants.FILE_PREFIX)
+					+ ProtomakEngineConstants.FILE_PREFIX.length());
+		}
+
+		LOG.debug("After removing protocol, target ns is: " + targetNameSpace);
+
+		String[] packageTokens = targetNameSpace.split("/");
+		for (int i = packageTokens.length - 1; i >= 0; i--) {
+			packageNameTokens.add(0, packageTokens[i]);
+		}
+
+		for (int i = 0; i < packageNameTokens.size(); i++) {
+			buff.append(packageNameTokens.get(i));
+			if (i + 1 < packageNameTokens.size()) {
+				buff.append(".");
+			}
+		}
+
+		return buff.toString();
+
 	}
-
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods

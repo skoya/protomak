@@ -29,6 +29,7 @@ public class ProtomakEngineHelperUnitTest {
 		ProtomakEngineHelper.convertTargetNsToProtoPackageName(null);
 	}
 
+	@Test
 	public void testTargetNameSpaceToProtoPackageConversion() {
 
 		String expectedPackageName = "simple-one-level.eu.jemos.www";
@@ -36,6 +37,8 @@ public class ProtomakEngineHelperUnitTest {
 		String packageName = ProtomakEngineHelper
 				.convertTargetNsToProtoPackageName(ProtomakEngineTestConstants.TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX);
 		Assert.assertNotNull("The package name cannot be null!", packageName);
+		Assert.assertEquals("The expected and actual proto package name don't match",
+				expectedPackageName, packageName);
 
 	}
 
