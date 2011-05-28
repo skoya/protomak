@@ -3,6 +3,8 @@
  */
 package uk.co.jemos.protomak.engine.api;
 
+import java.io.File;
+
 import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
@@ -28,7 +30,7 @@ public interface ProtoSerialisationService {
 	 * @throws ProtomakEngineSerialisationError
 	 *             If an error occured during serialisation
 	 */
-	public void writeProtoFile(String fileName, String outputPath, ProtoType proto)
+	public void writeProtoFile(String fileName, File outputPath, ProtoType proto)
 			throws ProtomakEngineSerialisationError;
 
 }

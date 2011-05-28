@@ -134,7 +134,9 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 			String protoFileName = ProtomakEngineHelper
 					.extractProtoFileNameFromXsdName(inputFilePath.getName());
 
-			protoSerialisationService.writeProtoFile(protoFileName, outputPath, proto);
+			File outputDir = new File(outputPath);
+
+			protoSerialisationService.writeProtoFile(protoFileName, outputDir, proto);
 			LOG.info("Proto file: " + protoFileName + " written to " + outputPath);
 
 		} catch (SAXException e) {

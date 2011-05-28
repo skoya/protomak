@@ -62,12 +62,11 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeProtoFile(String fileName, String outputPath, ProtoType proto)
+	public void writeProtoFile(String fileName, File outputPath, ProtoType proto)
 			throws ProtomakEngineSerialisationError {
 
-		File outputDir = new File(outputPath);
-		if (!outputDir.exists()) {
-			boolean created = outputDir.mkdirs();
+		if (!outputPath.exists()) {
+			boolean created = outputPath.mkdirs();
 			if (!created) {
 				String errMsg = "An error occurred while creating the output folder: " + outputPath;
 				LOG.error(errMsg);
@@ -95,7 +94,7 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 		BufferedOutputStream bos = null;
 
 		try {
-			File outputFileName = new File(outputDir.getAbsolutePath() + File.separatorChar
+			File outputFileName = new File(outputPath.getAbsolutePath() + File.separatorChar
 					+ fileName);
 			bos = new BufferedOutputStream(new FileOutputStream(outputFileName));
 
@@ -104,7 +103,7 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 			LOG.info("The proto content has been serialised to: " + fileName);
 		} catch (FileNotFoundException e) {
 			String errMsg = "An error occurred while trying to create the output file: " + fileName;
-			LOG.error(errMsg);
+			LOG.error(errMsg, e);
 			throw new ProtomakEngineSerialisationError(errMsg, e);
 
 		} catch (UnsupportedEncodingException e) {

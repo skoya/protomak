@@ -8,13 +8,20 @@ import java.io.FilenameFilter;
 
 import junit.framework.Assert;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 import uk.co.jemos.protomak.engine.api.ConversionService;
+import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
+import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
+import uk.co.jemos.protomak.engine.impl.PojoToProtoSerialisationServiceImpl;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 /**
  * Unit Tests for the conversion of XSDs to Proto files.
@@ -63,7 +70,6 @@ public class XsdToProtoUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir);
 
-		//TODO To test that .proto files exist in output folder
 	}
 
 	@Test
@@ -75,8 +81,6 @@ public class XsdToProtoUnitTest {
 		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
 		verifyProtoFilesHaveBeenWritten(outputDir);
-
-		//TODO To test that .proto files exist in output folder
 
 	}
 
@@ -90,7 +94,6 @@ public class XsdToProtoUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir);
 
-		//TODO To test that .proto files exist in output folder
 	}
 
 	@Test
@@ -103,7 +106,47 @@ public class XsdToProtoUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir);
 
-		//TODO To test that .proto files exist in output folder
+	}
+
+	@Test(expected = ProtomakEngineSerialisationError.class)
+	public void testSerialisationServiceWhenFolderAlreadyExists() {
+
+		ProtoSerialisationService service = PojoToProtoSerialisationServiceImpl.getInstance();
+
+		File fileMock = EasyMock.createMock(File.class);
+		EasyMock.expect(fileMock.exists()).andReturn(false);
+		EasyMock.expect(fileMock.mkdirs()).andReturn(false);
+
+		EasyMock.replay(fileMock);
+
+		PodamFactory factory = new PodamFactoryImpl();
+		ProtoType pojo = factory.manufacturePojo(ProtoType.class);
+		try {
+			service.writeProtoFile("foo", fileMock, pojo);
+		} finally {
+			EasyMock.verify(fileMock);
+		}
+
+	}
+
+	@Test(expected = ProtomakEngineSerialisationError.class)
+	public void testSerialisationServiceForFileNotFoundException() {
+
+		ProtoSerialisationService service = PojoToProtoSerialisationServiceImpl.getInstance();
+
+		File fileMock = EasyMock.createMock(File.class);
+		EasyMock.expect(fileMock.exists()).andReturn(true);
+		EasyMock.expect(fileMock.getAbsolutePath()).andReturn("fooPath");
+
+		EasyMock.replay(fileMock);
+
+		PodamFactory factory = new PodamFactoryImpl();
+		ProtoType pojo = factory.manufacturePojo(ProtoType.class);
+		try {
+			service.writeProtoFile("foo", fileMock, pojo);
+		} finally {
+			EasyMock.verify(fileMock);
+		}
 
 	}
 
@@ -118,6 +161,7 @@ public class XsdToProtoUnitTest {
 	 * @param outputDir2
 	 */
 	private void verifyProtoFilesHaveBeenWritten(File outputDir) {
+
 		Assert.assertTrue("The output folder must exist!", outputDir.exists());
 		Assert.assertTrue("The output folder must be a folder!", outputDir.isDirectory());
 		File[] listFiles = outputDir.listFiles(filter);
