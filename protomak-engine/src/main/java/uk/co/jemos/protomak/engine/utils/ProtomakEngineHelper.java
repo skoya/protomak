@@ -162,6 +162,39 @@ public class ProtomakEngineHelper {
 		return retValue;
 	}
 
+	/**
+	 * Given a target name space, it returns a proto package.
+	 * <p>
+	 * This method converts links in the form of
+	 * {@code http://www.jemos.eu/simple-one-level} to a proto package form of
+	 * {@code simple-one-level.eu.jemos.www}.
+	 * </p>
+	 * 
+	 * <p>
+	 * Details of the proto language and the proto package format can be found
+	 * <a href=
+	 * "http://code.google.com/apis/protocolbuffers/docs/proto.html#packages"
+	 * >online</a>
+	 * </p>
+	 * 
+	 * @param targetNameSpace
+	 *            A target name space to convert into a proto package name.
+	 * @return A package name in proto format.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the {@code targetNameSpace} is null.
+	 */
+	public static String convertTargetNsToProtoPackageName(String targetNameSpace) {
+
+		if (null == targetNameSpace || "".equals(targetNameSpace)) {
+			throw new IllegalArgumentException("Target name space cannot be null or empty");
+		}
+
+		String retValue = null;
+
+		return retValue;
+	}
+
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods

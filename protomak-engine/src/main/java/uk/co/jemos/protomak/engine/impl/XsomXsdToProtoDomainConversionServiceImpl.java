@@ -37,13 +37,13 @@ import com.sun.xml.xsom.parser.XSOMParser;
  * @author mtedone
  * 
  */
-public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
+public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionService {
 
 	//------------------->> Constants
 
 	/** The application logger. */
 	public static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger
-			.getLogger(XsomXsdToProtoConversionServiceImpl.class);
+			.getLogger(XsomXsdToProtoDomainConversionServiceImpl.class);
 
 	//------------------->> Instance / Static variables
 
@@ -61,7 +61,7 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	/**
 	 * Default constructor.
 	 */
-	public XsomXsdToProtoConversionServiceImpl() {
+	public XsomXsdToProtoDomainConversionServiceImpl() {
 		this(XsomDefaultComplexTypeProcessor.getInstance(), PojoToProtoSerialisationServiceImpl
 				.getInstance());
 	}
@@ -75,7 +75,7 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	 * @param protoSerialisationService
 	 *            The proto serialisation service.
 	 */
-	public XsomXsdToProtoConversionServiceImpl(XsomComplexTypeProcessor complexTypeProcessor,
+	public XsomXsdToProtoDomainConversionServiceImpl(XsomComplexTypeProcessor complexTypeProcessor,
 			ProtoSerialisationService protoSerialisationService) {
 		super();
 		this.complexTypeProcessor = complexTypeProcessor;

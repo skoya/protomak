@@ -168,6 +168,9 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			LOG.debug("XS Visitor: In Model group");
 			XSParticle[] children = group.getChildren();
 			for (XSParticle xsParticle : children) {
+				int minOccurs = xsParticle.getMinOccurs();
+				int maxOccurs = xsParticle.getMaxOccurs();
+
 				xsParticle.getTerm().visit(this);
 			}
 

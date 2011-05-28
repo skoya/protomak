@@ -24,7 +24,7 @@ import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.PojoToProtoSerialisationServiceImpl;
-import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoConversionServiceImpl;
+import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
@@ -54,7 +54,7 @@ public class XsdToProtoUnitTest {
 
 	//------------------->> Instance / Static variables
 
-	private XsomXsdToProtoConversionServiceImpl service;
+	private XsomXsdToProtoDomainConversionServiceImpl service;
 
 	//------------------->> Constructors
 
@@ -62,7 +62,7 @@ public class XsdToProtoUnitTest {
 
 	@Before
 	public void init() {
-		service = new XsomXsdToProtoConversionServiceImpl();
+		service = new XsomXsdToProtoDomainConversionServiceImpl();
 		XSOMParser parser = new XSOMParser();
 		service.setParser(parser);
 	}
