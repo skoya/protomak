@@ -71,8 +71,8 @@
 			<roles>
 				<role>Team Member</role>
 			</roles>
-			<timezone>UTC</timezone>			
-		</developer>		
+			<timezone>UTC</timezone>
+		</developer>
 		<developer>
 			<id>sharatkoya</id>
 			<name>Sharat Koya</name>
@@ -82,8 +82,8 @@
 			<roles>
 				<role>Team Member</role>
 			</roles>
-			<timezone>UTC</timezone>			
-		</developer>	
+			<timezone>UTC</timezone>
+		</developer>
 		<developer>
 			<id>edwilde</id>
 			<name>Ed Wilde</name>
@@ -93,8 +93,8 @@
 			<roles>
 				<role>Team Member</role>
 			</roles>
-			<timezone>UTC</timezone>			
-		</developer>				
+			<timezone>UTC</timezone>
+		</developer>
 	</developers>
 
 	<properties>
@@ -169,7 +169,7 @@
 						<descriptor>src/main/assembly/bin.xml</descriptor>
 					</descriptors>
 				</configuration>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
@@ -234,9 +234,9 @@
 			<version>0.6.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.commons</groupId>
-		  <artifactId>commons-io</artifactId>
-		  <version>1.3.2</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
 		</dependency>
 
 		<!-- Testing dependencies -->
@@ -251,7 +251,19 @@
 			<artifactId>easymock</artifactId>
 			<version>3.0</version>
 			<scope>test</scope>
-		</dependency>			
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.4.7</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-easymock</artifactId>
+			<version>1.4.7</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>uk.co.jemos.podam</groupId>
 			<artifactId>podam</artifactId>

@@ -5,23 +5,31 @@ package uk.co.jemos.protomak.engine.test.unit;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 
 import junit.framework.Assert;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.xml.sax.SAXException;
 
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
-import uk.co.jemos.protomak.engine.api.ConversionService;
 import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
+import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.PojoToProtoSerialisationServiceImpl;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
+
+import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
  * Unit Tests for the conversion of XSDs to Proto files.
@@ -29,6 +37,8 @@ import uk.co.jemos.xsds.protomak.proto.ProtoType;
  * @author mtedone
  * 
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(XSOMParser.class)
 public class XsdToProtoUnitTest {
 
 	//------------------->> Constants
@@ -43,7 +53,7 @@ public class XsdToProtoUnitTest {
 
 	//------------------->> Instance / Static variables
 
-	private ConversionService service;
+	private XsomXsdToProtoConversionServiceImpl service;
 
 	//------------------->> Constructors
 
@@ -52,6 +62,8 @@ public class XsdToProtoUnitTest {
 	@Before
 	public void init() {
 		service = new XsomXsdToProtoConversionServiceImpl();
+		XSOMParser parser = new XSOMParser();
+		service.setParser(parser);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -59,6 +71,56 @@ public class XsdToProtoUnitTest {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.NON_EXISTING_FILE_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+	}
+
+	@Test(expected = ProtomakXsdToProtoConversionError.class)
+	public void testConversionEngineWithIOException() throws Exception {
+
+		File xsdSchema = new File(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH);
+
+		XSOMParser parserMock = PowerMock.createMock(XSOMParser.class);
+
+		service.setParser(parserMock);
+		parserMock.parse(xsdSchema);
+		EasyMock.expectLastCall().andThrow(new IOException("Mocked Sax exception"));
+
+		PowerMock.replay(parserMock);
+
+		try {
+
+			service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
+					ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		} finally {
+
+			PowerMock.verify(parserMock);
+		}
+
+	}
+
+	@Test(expected = ProtomakXsdToProtoConversionError.class)
+	public void testConversionEngineWithSaxException() throws Exception {
+
+		File xsdSchema = new File(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH);
+
+		XSOMParser parserMock = PowerMock.createMock(XSOMParser.class);
+
+		service.setParser(parserMock);
+		parserMock.parse(xsdSchema);
+		EasyMock.expectLastCall().andThrow(new SAXException("Mocked Sax exception"));
+
+		PowerMock.replay(parserMock);
+
+		try {
+
+			service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
+					ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		} finally {
+
+			PowerMock.verify(parserMock);
+		}
+
 	}
 
 	@Test

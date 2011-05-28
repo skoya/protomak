@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import uk.co.jemos.protomak.engine.api.ConversionService;
 import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
@@ -56,6 +52,9 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 
 	/** The proto serialisation service */
 	private final ProtoSerialisationService protoSerialisationService;
+
+	/** The XSOM Schema parser */
+	private XSOMParser parser = new XSOMParser();
 
 	//------------------->> Constructors
 
@@ -109,14 +108,6 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 
 		ProtoType proto = new ProtoType();
 
-		XsdToProtoErrorHandler errorHandler = new XsdToProtoErrorHandler();
-		XsdToProtoEntityResolver entityResolver = new XsdToProtoEntityResolver();
-
-		//Let's start the dance by reading the XSD file
-		XSOMParser parser = new XSOMParser();
-		parser.setErrorHandler(errorHandler);
-		parser.setEntityResolver(entityResolver);
-
 		try {
 			parser.parse(inputFilePath);
 			XSSchemaSet sset = parser.getResult();
@@ -140,14 +131,28 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 			LOG.info("Proto file: " + protoFileName + " written to " + outputPath);
 
 		} catch (SAXException e) {
+			String errMsg = "A SAX Exception occurred while parsing the XSD Schema.";
+			LOG.error(errMsg, e);
 			throw new ProtomakXsdToProtoConversionError(e);
 		} catch (IOException e) {
+			String errMsg = "An IO Exception occurred while parsing the XSD Schema.";
+			LOG.error(errMsg, e);
 			throw new ProtomakXsdToProtoConversionError(e);
 		}
 
 	}
 
 	// ------------------->> Getters / Setters
+
+	/**
+	 * Setter method mainly for testing to inject mocks.
+	 * 
+	 * @param parser
+	 *            the parser to set
+	 */
+	public void setParser(XSOMParser parser) {
+		this.parser = parser;
+	}
 
 	//------------------->> Private methods
 
@@ -222,46 +227,5 @@ public class XsomXsdToProtoConversionServiceImpl implements ConversionService {
 	//------------------->> equals() / hashcode() / toString()
 
 	//------------------->> Inner classes
-
-	/**
-	 * It handles Schema parsing errors.
-	 * 
-	 * @author mtedone
-	 * 
-	 */
-	private static class XsdToProtoErrorHandler implements ErrorHandler {
-
-		public void warning(SAXParseException exception) throws SAXException {
-			LOG.warn("Warning from XSOM Parser: ", exception);
-			throw exception;
-		}
-
-		public void error(SAXParseException exception) throws SAXException {
-			LOG.error("Error from XSOM Parser: ", exception);
-			throw exception;
-		}
-
-		public void fatalError(SAXParseException exception) throws SAXException {
-			LOG.fatal("Fatal error from XSOM Parser: ", exception);
-			throw exception;
-
-		}
-
-	}
-
-	/**
-	 * It manages entity resolution.
-	 * 
-	 * @author mtedone
-	 * 
-	 */
-	private static class XsdToProtoEntityResolver implements EntityResolver {
-
-		public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
-				IOException {
-			throw new UnsupportedOperationException("Not implemented yet.");
-		}
-
-	}
 
 }
