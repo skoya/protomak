@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
@@ -77,14 +78,17 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 
 		StringBuilder buff = new StringBuilder();
 
+		writePackage(proto, buff);
+
 		List<MessageType> messages = proto.getMessage();
 		for (MessageType messageType : messages) {
-			buff.append(ProtomakEngineConstants.PROTO_TOKENS_MESSAGE)
-					.append(ProtomakEngineConstants.BLANK_SPACE).append(messageType.getName())
-					.append(ProtomakEngineConstants.BLANK_SPACE).append("{")
-					.append(ProtomakEngineConstants.NEW_LINE).append("}")
-					.append(ProtomakEngineConstants.NEW_LINE)
-					.append(ProtomakEngineConstants.NEW_LINE);
+			openMessage(buff, messageType);
+			List<MessageAttributeType> msgAttributes = messageType.getMsgAttribute();
+			for (MessageAttributeType messageAttribute : msgAttributes) {
+				writeMessageAttribute(buff, messageAttribute);
+			}
+			closeMessage(buff);
+
 		}
 
 		if (!fileName.endsWith(".proto")) {
@@ -131,6 +135,67 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 		String errMsg = "An error occurred while writing the output buffer to the output file";
 		LOG.error(errMsg);
 		throw new ProtomakEngineSerialisationError(errMsg, cause);
+	}
+
+	/**
+	 * It writes the package session of a proto file.
+	 * 
+	 * @param proto
+	 *            The {@link ProtoType} object containing data
+	 * @param buffer
+	 *            The buffer where to write data to
+	 */
+	private void writePackage(ProtoType proto, StringBuilder buffer) {
+		buffer.append(ProtomakEngineConstants.PACKAGE_TOKEN)
+				.append(ProtomakEngineConstants.BLANK_SPACE).append(proto.getPackage())
+				.append(ProtomakEngineConstants.NEW_LINE).append(ProtomakEngineConstants.NEW_LINE);
+	}
+
+	/**
+	 * It writes the opening part of a proto {@code message} element.
+	 * 
+	 * @param buffer
+	 *            The buffer where to write the opening message
+	 * @param messageType
+	 *            The {@link MessageType} containing the data
+	 */
+	private void openMessage(StringBuilder buffer, MessageType messageType) {
+		buffer.append(ProtomakEngineConstants.PROTO_TOKENS_MESSAGE)
+				.append(ProtomakEngineConstants.BLANK_SPACE).append(messageType.getName())
+				.append(ProtomakEngineConstants.BLANK_SPACE).append("{")
+				.append(ProtomakEngineConstants.NEW_LINE);
+	}
+
+	/**
+	 * It writes a message attribute to the proto file
+	 * 
+	 * @param buff
+	 * @param messageAttribute
+	 */
+	private void writeMessageAttribute(StringBuilder buff, MessageAttributeType messageAttribute) {
+
+		buff.append("\t")
+				.append(messageAttribute.getOptionality().name().toLowerCase())
+				.append(ProtomakEngineConstants.BLANK_SPACE)
+				.append(messageAttribute.getRuntimeType().getCustomType() != null ? messageAttribute
+						.getRuntimeType().getCustomType() : messageAttribute.getRuntimeType()
+						.getProtoType().name().toLowerCase())
+				.append(ProtomakEngineConstants.BLANK_SPACE).append(messageAttribute.getName())
+				.append(ProtomakEngineConstants.BLANK_SPACE).append("= ")
+				.append(messageAttribute.getIndex()).append(";")
+				.append(ProtomakEngineConstants.NEW_LINE);
+
+	}
+
+	/**
+	 * It writes the closing part of a proto {@code message} element.
+	 * 
+	 * @param buffer
+	 *            The buff where to write the closing message to
+	 */
+	private void closeMessage(StringBuilder buffer) {
+		buffer.append("}").append(ProtomakEngineConstants.NEW_LINE)
+				.append(ProtomakEngineConstants.NEW_LINE);
 	}
 
 	//------------------->> equals() / hashcode() / toString()

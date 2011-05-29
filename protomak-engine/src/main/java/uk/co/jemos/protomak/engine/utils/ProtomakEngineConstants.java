@@ -43,6 +43,9 @@ public class ProtomakEngineConstants {
 	/** The Token {@code message} within a proto file */
 	public static final String PROTO_TOKENS_MESSAGE = "message";
 
+	/** The Token {@code package} within a proto file */
+	public static final String PACKAGE_TOKEN = "package";
+
 	/** A blank space */
 	public static final String BLANK_SPACE = " ";
 
