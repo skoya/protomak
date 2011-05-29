@@ -129,6 +129,33 @@ public class ProtomakEngineHelperUnitTest {
 		Assert.assertEquals("The message attribute optional type does not match the expected one!",
 				MessageAttributeOptionalType.REPEATED, type);
 
+		//Now let's test some negative scenarios
+		maxOccurs = 1;
+		for (int i = -1; i < 3; i++) {
+			minOccurs = i;
+			if (minOccurs < 0 || minOccurs > 1) {
+				try {
+					ProtomakEngineHelper.getMessageAttributeOptionality(minOccurs, maxOccurs);
+					Assert.fail("The method should have failed since minOccurs is: " + minOccurs);
+				} catch (IllegalArgumentException e) {
+					//OK, expected
+				}
+			}
+		}
+
+		minOccurs = 0;
+		for (int i = -2; i < 3; i++) {
+			maxOccurs = i;
+			if (maxOccurs < -1 || maxOccurs > 1) {
+				try {
+					ProtomakEngineHelper.getMessageAttributeOptionality(minOccurs, maxOccurs);
+					Assert.fail("The method should have failed since maxOccurs is: " + maxOccurs);
+				} catch (IllegalArgumentException e) {
+					//OK, expected
+				}
+			}
+		}
+
 	}
 
 	// ------------------->> Getters / Setters
