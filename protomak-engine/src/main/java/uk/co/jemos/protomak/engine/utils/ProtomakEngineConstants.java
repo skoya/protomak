@@ -47,7 +47,7 @@ public class ProtomakEngineConstants {
 	public static final String PACKAGE_TOKEN = "package";
 
 	/** A blank space */
-	public static final String BLANK_SPACE = " ";
+	public static final String WHITE_SPACE = " ";
 
 	/** The default proto file name */
 	public static final String DEFAULT_PROTO_FILE_NAME = "default.proto";
