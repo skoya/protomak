@@ -1,0 +1,11 @@
+package multiple_complex_type_only.eu.jemos.www
+
+message UsePersonType {
+	required PersonType person = 1;
+}
+
+message PersonType {
+	required string firstName = 1;
+	required string lastName = 2;
+}
+

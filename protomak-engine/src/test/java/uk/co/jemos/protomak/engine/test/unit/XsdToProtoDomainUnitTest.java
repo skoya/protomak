@@ -3,12 +3,16 @@
  */
 package uk.co.jemos.protomak.engine.test.unit;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -170,7 +174,7 @@ public class XsdToProtoDomainUnitTest {
 	}
 
 	@Test
-	public void testMultipleComplexTypes() {
+	public void testMultipleComplexTypes() throws Exception {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
@@ -179,6 +183,26 @@ public class XsdToProtoDomainUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir,
 				ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH);
+
+		File expectedProtoFile = new File(
+				ProtomakEngineTestConstants.EXPECTED_MULTIPLE_COMPLEX_TYPES_PROTO_FILE_NAME);
+		Assert.assertTrue("The proto file: " + expectedProtoFile + " does not exist!",
+				expectedProtoFile.exists());
+		StringBuilder expectedOutputBuff = extractBufferFromProtoFile(expectedProtoFile);
+		Assert.assertNotNull("The string builder for the expected file cannot be null!",
+				expectedOutputBuff);
+		File protoFile = new File(
+				ProtomakEngineHelper
+						.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH));
+		File protoOutputFile = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+				+ File.separatorChar + protoFile.getName());
+		Assert.assertTrue("The file: " + protoOutputFile.getAbsolutePath() + " must exist!",
+				protoOutputFile.exists());
+		StringBuilder actualOutputBuff = extractBufferFromProtoFile(protoOutputFile);
+		Assert.assertNotNull("The string builder for the actual file cannot be null!",
+				actualOutputBuff);
+		Assert.assertEquals("The expected and actual proto files do not match!",
+				expectedOutputBuff.toString(), actualOutputBuff.toString());
 
 	}
 
@@ -212,6 +236,39 @@ public class XsdToProtoDomainUnitTest {
 				+ File.separatorChar + protoFileName);
 		Assert.assertTrue("The file: " + protoFile.getAbsolutePath() + " does not exist.",
 				protoFile.exists());
+
+	}
+
+	/**
+	 * It creates and returns a {@link StringBuilder} from the given proto file
+	 * 
+	 * @param protoFile
+	 *            The proto file
+	 * @return a {@link StringBuilder} from the given proto file
+	 * @throws IOException
+	 *             An exception occurred
+	 */
+	private StringBuilder extractBufferFromProtoFile(File protoFile) throws IOException {
+
+		StringBuilder buff = new StringBuilder();
+
+		byte[] buf = new byte[512];
+
+		BufferedInputStream bis = null;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			bis = new BufferedInputStream(new FileInputStream(protoFile));
+			int read = 0;
+			while ((read = bis.read(buf, 0, buf.length)) >= 0) {
+				bos.write(buf, 0, read);
+			}
+			bos.flush();
+			buff.append(new String(bos.toByteArray()));
+			return buff;
+		} finally {
+			IOUtils.closeQuietly(bis);
+			IOUtils.closeQuietly(bos);
+		}
 
 	}
 
