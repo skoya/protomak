@@ -38,6 +38,9 @@ public class ProtomakEngineTestConstants {
 	/** The path to single-element-with-complex-type.xsd */
 	public static final String SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH = "src/test/resources/test-xsds/single-element-with-complex-type.xsd";
 
+	/** The path to multiple-complex-types-only.xsd */
+	public static final String MULTIPLE_COMPLEX_TYPES_XSD_PATH = "src/test/resources/test-xsds/multiple-complex-types-only.xsd";
+
 	/** A target name space which contains HTTP as prefix */
 	public static final String TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX = "http://www.jemos.eu/simple-one-level";
 

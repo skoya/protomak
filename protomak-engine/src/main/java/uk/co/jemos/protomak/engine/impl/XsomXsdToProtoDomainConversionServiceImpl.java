@@ -191,10 +191,7 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 				proto.setPackage(packageName);
 			}
 
-			MessageType messageType = complexTypeProcessor.processComplexType(complexType);
-			LOG.info("Retrieved message type: " + messageType);
-			protoMessages.add(messageType);
-			LOG.info("Proto Type: " + proto);
+			complexTypeProcessor.processComplexType(protoMessages, complexType);
 
 		}
 	}
@@ -216,7 +213,7 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 			MessageType msgType = new MessageType();
 			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + messageSuffix);
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
-			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageTypeForElement(
+			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageAttribute(
 					declaredElementsIterator.next(), messageSuffix,
 					MessageAttributeOptionalType.REQUIRED);
 			msgAttributes.add(msgAttrType);

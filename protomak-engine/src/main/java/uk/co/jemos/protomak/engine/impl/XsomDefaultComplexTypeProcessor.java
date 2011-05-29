@@ -17,6 +17,7 @@ import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
+import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
 import com.sun.xml.xsom.XSAnnotation;
@@ -71,7 +72,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 	/**
 	 * {@inheritDoc}
 	 */
-	public MessageType processComplexType(XSType type) throws ProtomakXsdToProtoConversionError {
+	public MessageType processComplexType(List<MessageType> protoMessages, XSType type)
+			throws ProtomakXsdToProtoConversionError {
 
 		//Each proto message has numbered items starting from 1
 		int protoCounter = 1;
@@ -88,14 +90,10 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 					protoCounter, complexType);
 			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 			ComplexTypeVisitor visitor = new XsomDefaultComplexTypeProcessor.ComplexTypeVisitor(
-					retValue);
+					protoMessages, retValue);
 
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);
-
-			if (!retValue.getName().equals(visitor.messageType.getName())) {
-				retValue.getNestedMessage().add(visitor.messageType);
-			}
 
 		}
 
@@ -168,12 +166,18 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 		/**
 		 * The {@link MessageAttributeType} ordinal within a {@link MessageType}
-		 * .
+		 * 
 		 */
 		private int messageAttributeOrdinal = 1;
 
+		/** The collection of proto messages */
+		private List<MessageType> protoMessages;
+
 		/**
 		 * Full constructor.
+		 * 
+		 * @param protoMessages
+		 *            The collection of proto messages
 		 * 
 		 * @param complexType
 		 *            The complex type for this visitor
@@ -182,7 +186,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		 *            The MessageType to be filled for this complex type, or
 		 *            null if this is the root message type.
 		 */
-		public ComplexTypeVisitor(MessageType messageType) {
+		public ComplexTypeVisitor(List<MessageType> protoMessages, MessageType messageType) {
+			this.protoMessages = protoMessages;
 			this.messageType = messageType;
 		}
 
@@ -213,7 +218,7 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			}
 
 			//Let's clean after ourselves
-			messageAttributeOrdinal = 1;
+			protoMessages.add(messageType);
 
 		}
 
@@ -223,9 +228,10 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 			if (element.getType().isSimpleType()) {
 
-				messageType.getMsgAttribute().add(
-						ProtomakEngineHelper.getMessageTypeForElement(element,
-								messageAttributeOrdinal, attributeOptionality));
+				MessageAttributeType messageAttribute = ProtomakEngineHelper.getMessageAttribute(
+						element, messageAttributeOrdinal, attributeOptionality);
+
+				messageType.getMsgAttribute().add(messageAttribute);
 
 			} else {
 
@@ -236,12 +242,25 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 					if (elementDeclaredType.isComplexType()) {
 
-						LOG.debug("Found complex type: " + elementType);
-						messageType = XsomDefaultComplexTypeProcessor.getInstance()
-								.processComplexType(elementDeclaredType.asComplexType());
+						//						LOG.debug("Found complex type: " + elementType);
+						//						MessageType innerMessageType = XsomDefaultComplexTypeProcessor
+						//								.getInstance().processComplexType(protoMessages,
+						//										elementDeclaredType.asComplexType());
+						//
+						//						protoMessages.add(innerMessageType);
+
+						MessageAttributeType msgAttributeType = new MessageAttributeType();
+						msgAttributeType.setName(element.getName());
+						msgAttributeType.setOptionality(attributeOptionality);
+						msgAttributeType.setIndex(messageAttributeOrdinal);
+						MessageRuntimeType runtimeType = new MessageRuntimeType();
+						runtimeType.setCustomType(elementDeclaredType.getName());
+						msgAttributeType.setRuntimeType(runtimeType);
+						messageType.getMsgAttribute().add(msgAttributeType);
 
 					}
 				}
+
 			}
 
 		}
@@ -284,7 +303,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 		public void complexType(XSComplexType type) {
 			messageType.getNestedMessage().add(
-					XsomDefaultComplexTypeProcessor.getInstance().processComplexType(type));
+					XsomDefaultComplexTypeProcessor.getInstance().processComplexType(protoMessages,
+							type));
 
 		}
 

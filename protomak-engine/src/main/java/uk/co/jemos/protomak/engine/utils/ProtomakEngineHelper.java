@@ -117,7 +117,7 @@ public class ProtomakEngineHelper {
 	 *            The optionality to assign to this message attribute.
 	 * @return A {@link MessageType}
 	 */
-	public static MessageAttributeType getMessageTypeForElement(XSElementDecl element,
+	public static MessageAttributeType getMessageAttribute(XSElementDecl element,
 			int messageAttributeOrdinal, MessageAttributeOptionalType attributeOptionality) {
 
 		MessageAttributeType msgAttrType = new MessageAttributeType();

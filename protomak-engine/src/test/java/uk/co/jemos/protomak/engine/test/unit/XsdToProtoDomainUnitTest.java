@@ -18,17 +18,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.xml.sax.SAXException;
 
-import uk.co.jemos.podam.api.PodamFactory;
-import uk.co.jemos.podam.api.PodamFactoryImpl;
-import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
-import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
-import uk.co.jemos.protomak.engine.impl.PojoToProtoSerialisationServiceImpl;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
-import uk.co.jemos.xsds.protomak.proto.ProtoType;
 
 import com.sun.xml.xsom.parser.XSOMParser;
 
@@ -40,7 +34,7 @@ import com.sun.xml.xsom.parser.XSOMParser;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(XSOMParser.class)
-public class XsdToProtoUnitTest {
+public class XsdToProtoDomainUnitTest {
 
 	//------------------->> Constants
 
@@ -175,45 +169,16 @@ public class XsdToProtoUnitTest {
 
 	}
 
-	@Test(expected = ProtomakEngineSerialisationError.class)
-	public void testSerialisationServiceWhenFolderAlreadyExists() {
+	@Test
+	public void testMultipleComplexTypes() {
 
-		ProtoSerialisationService service = PojoToProtoSerialisationServiceImpl.getInstance();
+		service.generateProtoFiles(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File fileMock = EasyMock.createMock(File.class);
-		EasyMock.expect(fileMock.exists()).andReturn(false);
-		EasyMock.expect(fileMock.mkdirs()).andReturn(false);
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		EasyMock.replay(fileMock);
-
-		PodamFactory factory = new PodamFactoryImpl();
-		ProtoType pojo = factory.manufacturePojo(ProtoType.class);
-		try {
-			service.writeProtoFile("foo", fileMock, pojo);
-		} finally {
-			EasyMock.verify(fileMock);
-		}
-
-	}
-
-	@Test(expected = ProtomakEngineSerialisationError.class)
-	public void testSerialisationServiceForFileNotFoundException() {
-
-		ProtoSerialisationService service = PojoToProtoSerialisationServiceImpl.getInstance();
-
-		File fileMock = EasyMock.createMock(File.class);
-		EasyMock.expect(fileMock.exists()).andReturn(true);
-		EasyMock.expect(fileMock.getAbsolutePath()).andReturn("fooPath");
-
-		EasyMock.replay(fileMock);
-
-		PodamFactory factory = new PodamFactoryImpl();
-		ProtoType pojo = factory.manufacturePojo(ProtoType.class);
-		try {
-			service.writeProtoFile("foo", fileMock, pojo);
-		} finally {
-			EasyMock.verify(fileMock);
-		}
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH);
 
 	}
 
