@@ -257,6 +257,43 @@ public class ProtomakEngineHelper {
 
 	}
 
+	/**
+	 * Given a min and max occurrence, it returns the appropriate
+	 * {@link MessageAttributeOptionalType}.
+	 * 
+	 * @param minOccurs
+	 *            The XSD element {@code minOccurs} element.
+	 * @param maxOccurs
+	 *            The XSD element {@code maxOccurs} element.
+	 * @return The appropriate {@link MessageAttributeOptionalType} for the
+	 *         given parameters.
+	 */
+	public static MessageAttributeOptionalType getMessageAttributeOptionality(int minOccurs,
+			int maxOccurs) {
+
+		MessageAttributeOptionalType retValue = null;
+
+		if (minOccurs == 0) {
+			if (maxOccurs == 1) {
+				retValue = MessageAttributeOptionalType.OPTIONAL;
+			} else {
+				retValue = MessageAttributeOptionalType.REPEATED;
+			}
+		} else { //minOccurs = 1
+
+			if (maxOccurs == 1) {
+				retValue = MessageAttributeOptionalType.REQUIRED;
+			} else {
+				retValue = MessageAttributeOptionalType.REPEATED;
+			}
+
+		}
+
+		return retValue;
+	}
+
+	//------------------->> Private methods
+
 	// ------------------->> Getters / Setters
 
 	/**
@@ -301,8 +338,6 @@ public class ProtomakEngineHelper {
 		}
 
 	}
-
-	//------------------->> Private methods
 
 	//------------------->> equals() / hashcode() / toString()
 

@@ -9,8 +9,11 @@ import org.junit.Test;
 
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 
 /**
+ * Unit tests for the {@link ProtomakEngineHelper} class.
+ * 
  * @author mtedone
  * 
  */
@@ -94,6 +97,37 @@ public class ProtomakEngineHelperUnitTest {
 		String packageName = ProtomakEngineHelper
 				.convertTargetNsToProtoPackageName(ProtomakEngineTestConstants.TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX_AND_SOME_UPPERCASE);
 		verifyPackageName(expectedPackageName, packageName);
+
+	}
+
+	@Test
+	public void testOptionality() {
+
+		int minOccurs = 0;
+		int maxOccurs = 1;
+
+		MessageAttributeOptionalType type = ProtomakEngineHelper.getMessageAttributeOptionality(
+				minOccurs, maxOccurs);
+		Assert.assertEquals("The message attribute optional type does not match the expected one!",
+				MessageAttributeOptionalType.OPTIONAL, type);
+
+		minOccurs = 0;
+		maxOccurs = -1;
+		type = ProtomakEngineHelper.getMessageAttributeOptionality(minOccurs, maxOccurs);
+		Assert.assertEquals("The message attribute optional type does not match the expected one!",
+				MessageAttributeOptionalType.REPEATED, type);
+
+		minOccurs = 1;
+		maxOccurs = 1;
+		type = ProtomakEngineHelper.getMessageAttributeOptionality(minOccurs, maxOccurs);
+		Assert.assertEquals("The message attribute optional type does not match the expected one!",
+				MessageAttributeOptionalType.REQUIRED, type);
+
+		minOccurs = 1;
+		maxOccurs = -1;
+		type = ProtomakEngineHelper.getMessageAttributeOptionality(minOccurs, maxOccurs);
+		Assert.assertEquals("The message attribute optional type does not match the expected one!",
+				MessageAttributeOptionalType.REPEATED, type);
 
 	}
 
