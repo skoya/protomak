@@ -7,9 +7,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.jcip.annotations.NotThreadSafe;
+
+import org.jpatterns.gof.VisitorPattern;
+import org.jpatterns.gof.VisitorPattern.ConcreteVisitor;
+
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
@@ -136,9 +142,35 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 	//------------------->> Inner classes
 
+	/**
+	 * This class implements an XSOM visitor, invoked by the XSOM parser when
+	 * traversing the XSD elements.
+	 * 
+	 * <p>
+	 * This class is not thread-safe; its state should not be shared amongst
+	 * concurrent threads but rather a new instance should be created for each
+	 * execution.
+	 * </p>
+	 * 
+	 * @author mtedone
+	 * 
+	 */
+	@NotThreadSafe
+	@VisitorPattern
+	@ConcreteVisitor
 	private static final class ComplexTypeVisitor implements XSVisitor {
 
+		/** The {@link MessageType} that will be generated from this visit. */
 		private MessageType messageType;
+
+		/** The Message attribute optionality. */
+		private MessageAttributeOptionalType attributeOptionality;
+
+		/**
+		 * The {@link MessageAttributeType} ordinal within a {@link MessageType}
+		 * .
+		 */
+		private int messageAttributeOrdinal = 1;
 
 		/**
 		 * Full constructor.
@@ -171,8 +203,17 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 				int minOccurs = xsParticle.getMinOccurs();
 				int maxOccurs = xsParticle.getMaxOccurs();
 
+				MessageAttributeOptionalType attributeOptionality = ProtomakEngineHelper
+						.getMessageAttributeOptionality(minOccurs, maxOccurs);
+				this.attributeOptionality = attributeOptionality;
+
 				xsParticle.getTerm().visit(this);
+
+				messageAttributeOrdinal++;
 			}
+
+			//Let's clean after ourselves
+			messageAttributeOrdinal = 1;
 
 		}
 
@@ -183,7 +224,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			if (element.getType().isSimpleType()) {
 
 				messageType.getMsgAttribute().add(
-						ProtomakEngineHelper.getMessageTypeForElement(element, 1));
+						ProtomakEngineHelper.getMessageTypeForElement(element,
+								messageAttributeOrdinal, attributeOptionality));
 
 			} else {
 

@@ -17,6 +17,7 @@ import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
@@ -183,8 +184,9 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 				continue;
 			}
 			if (null == packageName) {
-				//FIXME Transform package name in proto package name
-				packageName = complexType.getTargetNamespace();
+
+				packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(complexType
+						.getTargetNamespace());
 				LOG.info("Proto package will be: " + packageName);
 				proto.setPackage(packageName);
 			}
@@ -215,7 +217,8 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + messageSuffix);
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
 			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageTypeForElement(
-					declaredElementsIterator.next(), messageSuffix);
+					declaredElementsIterator.next(), messageSuffix,
+					MessageAttributeOptionalType.REQUIRED);
 			msgAttributes.add(msgAttrType);
 
 			messageSuffix++;

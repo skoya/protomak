@@ -110,18 +110,20 @@ public class ProtomakEngineHelper {
 	 * 
 	 * @param element
 	 *            The XSD element
-	 * @param messageSuffix
-	 *            The messageSuffix
+	 * @param messageAttributeOrdinal
+	 *            The proto index of this message attribute within a
+	 *            {@link MessageType}.
+	 * @param attributeOptionality
+	 *            The optionality to assign to this message attribute.
 	 * @return A {@link MessageType}
 	 */
 	public static MessageAttributeType getMessageTypeForElement(XSElementDecl element,
-			int messageSuffix) {
+			int messageAttributeOrdinal, MessageAttributeOptionalType attributeOptionality) {
 
 		MessageAttributeType msgAttrType = new MessageAttributeType();
 		msgAttrType.setName(element.getName());
-		msgAttrType.setIndex(1);//Always one attribute per element
-		//For single elements it appears there are no other options than required
-		msgAttrType.setOptionality(MessageAttributeOptionalType.REQUIRED);
+		msgAttrType.setIndex(messageAttributeOrdinal);
+		msgAttrType.setOptionality(attributeOptionality);
 		XSType elementType = element.getType();
 		MessageRuntimeType runtimeType = new MessageRuntimeType();
 		if (elementType.isSimpleType()) {
