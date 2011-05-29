@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/single-element-with-complex-type" xmlns:tns="http://www.jemos.eu/single-element-with-complex-type" elementFormDefault="qualified">
 
-    <complexType name="type">
+    <complexType name="ComplexType">
     	<sequence>
     		<element name="optionalUnboundedElement" type="string" minOccurs="0" maxOccurs="unbounded"></element>
     		<element name="optionalUniqueElement" type="string" minOccurs="0" maxOccurs="1"></element>
@@ -10,5 +10,5 @@
     	</sequence>
     </complexType>
 
-    <element name="person" type="tns:type"></element>
+    <element name="complexType" type="tns:ComplexType"></element>
 </schema>
