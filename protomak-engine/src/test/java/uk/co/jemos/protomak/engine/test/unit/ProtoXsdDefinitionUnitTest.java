@@ -20,7 +20,6 @@ import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.EnumType;
 import uk.co.jemos.xsds.protomak.proto.ExtendType;
 import uk.co.jemos.xsds.protomak.proto.ExtensionType;
-import uk.co.jemos.xsds.protomak.proto.KeyValueType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ObjectFactory;
@@ -103,9 +102,9 @@ public class ProtoXsdDefinitionUnitTest {
 		List<EnumType> enums = msgType.getEnum();
 		for (int i = 0; i < 5; i++) {
 			EnumType enumType = factory.manufacturePojo(EnumType.class);
-			List<KeyValueType> values = enumType.getEnumConstant();
+			List<String> values = enumType.getEnumEntry();
 			for (int j = 0; j < 2; j++) {
-				values.add(factory.manufacturePojo(KeyValueType.class));
+				values.add(factory.manufacturePojo(String.class));
 			}
 			enums.add(enumType);
 		}

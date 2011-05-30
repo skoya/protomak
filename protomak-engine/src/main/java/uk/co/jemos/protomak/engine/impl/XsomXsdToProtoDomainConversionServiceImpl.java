@@ -190,10 +190,12 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 				LOG.info("Proto package will be: " + packageName);
 				proto.setPackage(packageName);
 			}
-
+			LOG.debug("Processing complex type: " + complexType.getName());
 			complexTypeProcessor.processComplexType(protoMessages, complexType);
 
 		}
+
+		LOG.info("All complex types have been processed.");
 	}
 
 	/**

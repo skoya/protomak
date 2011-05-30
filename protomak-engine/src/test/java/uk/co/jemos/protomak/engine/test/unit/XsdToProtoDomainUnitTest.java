@@ -77,7 +77,7 @@ public class XsdToProtoDomainUnitTest {
 
 		service.setParser(parserMock);
 		parserMock.parse(xsdSchema);
-		EasyMock.expectLastCall().andThrow(new IOException("Mocked Sax exception"));
+		EasyMock.expectLastCall().andThrow(new IOException("Mocked IO exception"));
 
 		PowerMock.replay(parserMock);
 
@@ -153,6 +153,20 @@ public class XsdToProtoDomainUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir,
 				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH);
+
+	}
+
+	@Test
+	public void testElementWithComplexAndSimpleTypeWithRestrictions() {
+		service.generateProtoFiles(
+				ProtomakEngineTestConstants.ELEMENT_WITH_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(
+				outputDir,
+				ProtomakEngineTestConstants.ELEMENT_WITH_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_XSD_PATH);
 
 	}
 

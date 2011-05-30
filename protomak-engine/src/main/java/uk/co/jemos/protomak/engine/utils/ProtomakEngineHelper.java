@@ -126,19 +126,29 @@ public class ProtomakEngineHelper {
 		msgAttrType.setOptionality(attributeOptionality);
 		XSType elementType = element.getType();
 		MessageRuntimeType runtimeType = new MessageRuntimeType();
-		if (elementType.isSimpleType()) {
+
+		if (elementType.isComplexType()) {
+
+			runtimeType.setCustomType(elementType.getName());
+
+		} else {
+
+			//This is a simple type
+
 			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
 					.get(elementType.getName());
 			if (null == protoRuntimeType) {
-				throw new IllegalStateException(
-						"For the XSD type: "
-								+ elementType.getName()
-								+ " no mapping could be found in ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING");
+				LOG.debug("For element: " + element.getName() + " the SimpleType: "
+						+ elementType.getName() + " appears to be custom.");
+				//This is a custom SimpleType
+				runtimeType.setCustomType(elementType.getName());
+
+			} else {
+
+				runtimeType.setProtoType(protoRuntimeType);
+
 			}
 
-			runtimeType.setProtoType(protoRuntimeType);
-		} else {
-			runtimeType.setCustomType(elementType.getName());
 		}
 
 		msgAttrType.setRuntimeType(runtimeType);

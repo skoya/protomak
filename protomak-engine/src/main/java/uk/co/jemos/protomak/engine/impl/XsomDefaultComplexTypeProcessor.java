@@ -15,10 +15,12 @@ import org.jpatterns.gof.VisitorPattern.ConcreteVisitor;
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.EnumType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageRuntimeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
+import uk.co.jemos.xsds.protomak.proto.ProtoRuntimeType;
 
 import com.sun.xml.xsom.XSAnnotation;
 import com.sun.xml.xsom.XSAttGroupDecl;
@@ -33,6 +35,7 @@ import com.sun.xml.xsom.XSModelGroup;
 import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSNotation;
 import com.sun.xml.xsom.XSParticle;
+import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSTerm;
@@ -75,9 +78,6 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 	public MessageType processComplexType(List<MessageType> protoMessages, XSType type)
 			throws ProtomakXsdToProtoConversionError {
 
-		//Each proto message has numbered items starting from 1
-		int protoCounter = 1;
-
 		LOG.info("Processing type: " + type.getName() + ". Is it complex? " + type.isComplexType());
 
 		MessageType retValue = new MessageType();
@@ -86,14 +86,14 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		if (type.isComplexType()) {
 			XSComplexType complexType = type.asComplexType();
 			retValue.setName(complexType.getName());
-			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
-					protoCounter, complexType);
-			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 			ComplexTypeVisitor visitor = new XsomDefaultComplexTypeProcessor.ComplexTypeVisitor(
 					protoMessages, retValue);
 
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);
+			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
+					visitor.getMessageAttributeOrdinal(), complexType);
+			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 
 		}
 
@@ -228,6 +228,16 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 			if (element.getType().isSimpleType()) {
 
+				// If this is a custom simple type, we need to get the element from the XSD
+				ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
+						.get(elementType);
+
+				if (null == protoRuntimeType) {
+					LOG.info("Processing custom simple type: " + elementType);
+					XSSimpleType simpleType = element.getOwnerSchema().getSimpleType(elementType);
+					simpleType.visit(this);
+				}
+
 				MessageAttributeType messageAttribute = ProtomakEngineHelper.getMessageAttribute(
 						element, messageAttributeOrdinal, attributeOptionality);
 
@@ -241,13 +251,6 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 				if (null != elementDeclaredType) {
 
 					if (elementDeclaredType.isComplexType()) {
-
-						//						LOG.debug("Found complex type: " + elementType);
-						//						MessageType innerMessageType = XsomDefaultComplexTypeProcessor
-						//								.getInstance().processComplexType(protoMessages,
-						//										elementDeclaredType.asComplexType());
-						//
-						//						protoMessages.add(innerMessageType);
 
 						MessageAttributeType msgAttributeType = new MessageAttributeType();
 						msgAttributeType.setName(element.getName());
@@ -266,7 +269,31 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		}
 
 		public void simpleType(XSSimpleType simpleType) {
-			System.out.println("Visitor simple type: " + simpleType.getName());
+			LOG.debug("In Visitor: processing custom simple type...");
+			XSType baseType = simpleType.getBaseType();
+			LOG.debug("Simple type base type: " + baseType.getName());
+			if (simpleType.isRestriction()) {
+				XSRestrictionSimpleType restriction = simpleType.asRestriction();
+				if (baseType.getName().equals("string")) {
+					List<XSFacet> enumarationFacets = restriction.getFacets("enumeration");
+					if (!enumarationFacets.isEmpty()) {
+						List<EnumType> enumerations = messageType.getEnum();
+						EnumType enumType = new EnumType();
+						enumType.setName(simpleType.getName());
+						List<String> enumEntries = enumType.getEnumEntry();
+						for (XSFacet xsFacet : enumarationFacets) {
+							enumEntries.add(xsFacet.getValue().toString());
+						}
+						enumerations.add(enumType);
+					}
+
+				} else {
+
+					LOG.warn("The string base restriction for type: " + simpleType.getName()
+							+ " does not seem to have any enumerations");
+
+				}
+			}
 
 		}
 
@@ -331,6 +358,13 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		public void xpath(XSXPath xp) {
 			throw new UnsupportedOperationException("Not implemented.");
 
+		}
+
+		/**
+		 * @return the messageAttributeOrdinal
+		 */
+		public int getMessageAttributeOrdinal() {
+			return messageAttributeOrdinal;
 		}
 
 		/**

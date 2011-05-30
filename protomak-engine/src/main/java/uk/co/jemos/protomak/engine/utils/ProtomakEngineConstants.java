@@ -61,6 +61,9 @@ public class ProtomakEngineConstants {
 	/** The file protocol prefix */
 	public static final String FILE_PREFIX = "file:///";
 
+	/** The proto enum token */
+	public static final String ENUM_TOKEN = "enum";
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();

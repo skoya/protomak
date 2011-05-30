@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import uk.co.jemos.protomak.engine.api.ProtoSerialisationService;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakEngineSerialisationError;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
+import uk.co.jemos.xsds.protomak.proto.EnumType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 import uk.co.jemos.xsds.protomak.proto.ProtoType;
@@ -85,6 +86,9 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 		List<MessageType> messages = proto.getMessage();
 		for (MessageType messageType : messages) {
 			openMessage(buff, messageType);
+			if (!messageType.getEnum().isEmpty()) {
+				writeEnums(messageType.getEnum(), buff);
+			}
 			List<MessageAttributeType> msgAttributes = messageType.getMsgAttribute();
 			for (MessageAttributeType messageAttribute : msgAttributes) {
 				writeMessageAttribute(buff, messageAttribute);
@@ -125,6 +129,38 @@ public class PojoToProtoSerialisationServiceImpl implements ProtoSerialisationSe
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods
+
+	/**
+	 * It writes the enums within the message type
+	 * 
+	 * @param enums
+	 *            The list of enums to write
+	 * @param buffer
+	 *            The buffer where to write the enums to
+	 */
+	private void writeEnums(List<EnumType> enums, StringBuilder buffer) {
+
+		for (EnumType enumType : enums) {
+			int idx = 1;
+			buffer.append("\t")//
+					.append(ProtomakEngineConstants.ENUM_TOKEN)//
+					.append(ProtomakEngineConstants.WHITE_SPACE)//
+					.append(enumType.getName()).append(ProtomakEngineConstants.WHITE_SPACE) //
+					.append("{").append(ProtomakEngineConstants.NEW_LINE);//
+
+			List<String> enumEntries = enumType.getEnumEntry();
+			for (String enumEntry : enumEntries) {
+				buffer.append("\t\t").append(enumEntry).append(" = ").append(idx).append(";")
+						.append(ProtomakEngineConstants.NEW_LINE);
+				idx++;
+
+			}
+
+		}
+
+		buffer.append("\t").append("}").append(ProtomakEngineConstants.NEW_LINE);
+
+	}
 
 	/**
 	 * It writes a disclaimer comment to the proto file
