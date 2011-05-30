@@ -17,6 +17,7 @@ import uk.co.jemos.xsds.protomak.proto.ProtoRuntimeType;
 import com.sun.xml.xsom.XSAttributeDecl;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSElementDecl;
+import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
 /**
@@ -133,20 +134,29 @@ public class ProtomakEngineHelper {
 
 		} else {
 
-			//This is a simple type
+			XSSimpleType simpleType = elementType.asSimpleType();
 
-			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
-					.get(elementType.getName());
-			if (null == protoRuntimeType) {
-				LOG.debug("For element: " + element.getName() + " the SimpleType: "
-						+ elementType.getName() + " appears to be custom.");
-				//This is a custom SimpleType
-				runtimeType.setCustomType(elementType.getName());
+			if (simpleType.isRestriction() && simpleType.isLocal()) {
+
+				runtimeType
+						.setCustomType(ProtomakEngineConstants.ANONYMOUS_ENUM_DEFAULT_MESSAGE_TYPE_NAME
+								+ messageAttributeOrdinal);
 
 			} else {
 
-				runtimeType.setProtoType(protoRuntimeType);
+				ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
+						.get(elementType.getName());
+				if (null == protoRuntimeType) {
+					LOG.debug("For element: " + element.getName() + " the SimpleType: "
+							+ elementType.getName() + " appears to be custom.");
+					//This is a custom SimpleType
+					runtimeType.setCustomType(elementType.getName());
 
+				} else {
+
+					runtimeType.setProtoType(protoRuntimeType);
+
+				}
 			}
 
 		}

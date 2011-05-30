@@ -64,6 +64,9 @@ public class ProtomakEngineConstants {
 	/** The proto enum token */
 	public static final String ENUM_TOKEN = "enum";
 
+	/** The default enum name for anonymous types */
+	public static final String ANONYMOUS_ENUM_DEFAULT_MESSAGE_TYPE_NAME = "AnonymousEnum";
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();

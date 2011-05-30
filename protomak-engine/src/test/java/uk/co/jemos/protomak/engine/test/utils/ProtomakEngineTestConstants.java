@@ -51,6 +51,10 @@ public class ProtomakEngineTestConstants {
 	public static final String MULTIPLE_COMPLEX_TYPES_XSD_PATH = TEST_XSDS_FOLDER
 			+ File.separatorChar + "multiple-complex-types-only.xsd";
 
+	/** The path to the anonymous-types XSD file */
+	public static final String ANONYMOUS_TYPES_XSD_PATH = TEST_XSDS_FOLDER + File.separatorChar
+			+ "anonymous-types.xsd";
+
 	/**
 	 * The full path to element-complex-and single-type-with-restrictions XSD
 	 * file.

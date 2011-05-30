@@ -196,6 +196,17 @@ public class XsdToProtoDomainUnitTest {
 
 	}
 
+	@Test
+	public void testAnonymousTypes() {
+		service.generateProtoFiles(ProtomakEngineTestConstants.ANONYMOUS_TYPES_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.ANONYMOUS_TYPES_XSD_PATH);
+	}
+
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods

@@ -25,6 +25,7 @@ import uk.co.jemos.xsds.protomak.proto.ProtoType;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
+import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.parser.XSOMParser;
 
 /**
@@ -213,11 +214,18 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 		int messageSuffix = 1;
 		while (declaredElementsIterator.hasNext()) {
 			MessageType msgType = new MessageType();
+			XSElementDecl element = declaredElementsIterator.next();
+			XSType type = element.getType();
+			if (type.isLocal()) {
+				LOG.debug("Type for element: " + element.getName() + " is local");
+				TypeVisitor visitor = new TypeVisitor(proto.getMessage(), msgType);
+				type.visit(visitor);
+			}
+
 			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + messageSuffix);
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
-			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageAttribute(
-					declaredElementsIterator.next(), messageSuffix,
-					MessageAttributeOptionalType.REQUIRED);
+			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageAttribute(element,
+					messageSuffix, MessageAttributeOptionalType.REQUIRED);
 			msgAttributes.add(msgAttrType);
 
 			messageSuffix++;
