@@ -68,6 +68,9 @@ public class ProtomakEngineTestConstants {
 	/** A target name space which contains HTTP as prefix with some upper cases. */
 	public static final String TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX_AND_SOME_UPPERCASE = "http://wWw.JEMOS.eu/FOO";
 
+	/** A relative target name space */
+	public static final String TEST_TARGET_NAMESPACE_WITH_RELATIVE_URL = "../../../foo/bar/baz/my_namespace";
+
 	/**
 	 * The path to public static final String
 	 * SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH = null;

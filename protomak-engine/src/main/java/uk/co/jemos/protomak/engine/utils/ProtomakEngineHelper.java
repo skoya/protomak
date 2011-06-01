@@ -3,6 +3,8 @@
  */
 package uk.co.jemos.protomak.engine.utils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -231,52 +233,53 @@ public class ProtomakEngineHelper {
 	 */
 	public static String convertTargetNsToProtoPackageName(String targetNameSpace) {
 
-		validatePackageName(targetNameSpace);
+		URI uri = getNormalisedUri(targetNameSpace);
 
-		targetNameSpace = targetNameSpace.toLowerCase().trim();
+		String authority = uri.getAuthority();
 
-		List<String> packageNameTokens = new ArrayList<String>();
+		List<String> packageTokens = new ArrayList<String>();
 
-		StringBuilder buff = new StringBuilder();
+		if (authority != null) {
+			//Reverses the authority to form the package name
+			String[] authorityTokens = uri.getHost().split("\\.");
+			for (int i = authorityTokens.length - 1; i >= 0; i--) {
+				packageTokens.add(authorityTokens[i]);
+			}
+		}
 
-		if (targetNameSpace.startsWith(ProtomakEngineConstants.HTTP_PREFIX)) {
-			targetNameSpace = targetNameSpace.substring(targetNameSpace
-					.indexOf(ProtomakEngineConstants.HTTP_PREFIX)
-					+ ProtomakEngineConstants.HTTP_PREFIX.length());
+		String path = uri.getPath();
+		if (null != path) {
 
-			int serverTokenIdx = targetNameSpace.indexOf("/");
-			if (serverTokenIdx >= 0) {
-				String serverToken = targetNameSpace.substring(0, serverTokenIdx);
-				String[] serverTokenParts = serverToken.split("\\.");
-				for (int i = serverTokenParts.length - 1; i >= 0; i--) {
-					packageNameTokens.add(serverTokenParts[i]);
+			//It removes all ../
+			int idx = 0;
+			while ((idx = path.indexOf("../")) >= 0) {
+				path = path.substring(idx + 3);
+			}
+
+			String[] pathTokens = path.split("/");
+			if (pathTokens != null && pathTokens.length > 0) {
+				for (String pathToken : pathTokens) {
+					if (pathToken.equals("")) {
+						continue;
+					}
+					packageTokens.add(0, pathToken);
 				}
-
-				targetNameSpace = targetNameSpace.substring(serverTokenIdx + 1);
+			} else {
+				packageTokens.add(0, path);
 			}
 
 		}
 
-		LOG.debug("After removing protocol, target ns is: " + targetNameSpace);
+		StringBuilder buff = new StringBuilder();
 
-		String[] packageTokens = targetNameSpace.split("/");
-		String packageToken = null;
-		for (int i = packageTokens.length - 1; i >= 0; i--) {
-			packageToken = packageTokens[i];
-			packageToken = packageToken.replace('-', '_');
-			packageNameTokens.add(0, packageToken);
-		}
-
-		for (int i = 0; i < packageNameTokens.size(); i++) {
-			buff.append(packageNameTokens.get(i));
-			if (i + 1 < packageNameTokens.size()) {
+		for (int i = 0; i < packageTokens.size(); i++) {
+			buff.append(packageTokens.get(i));
+			if (i + 1 < packageTokens.size()) {
 				buff.append(".");
 			}
 		}
 
-		LOG.info("Returning target namespace: " + buff.toString());
 		return buff.toString();
-
 	}
 
 	/**
@@ -334,19 +337,24 @@ public class ProtomakEngineHelper {
 	// ------------------->> Getters / Setters
 
 	/**
-	 * It validates the package name and throws an exception if the package name
-	 * violates the standards.
+	 * It creates, validates and returns the URI given as argument, throwing
+	 * exception in case of any anomalies.
 	 * 
 	 * @param targetNameSpace
 	 *            The package name to validate
+	 * @return
 	 * 
 	 * @throws IllegalArgumentException
+	 *             <ul>
+	 *             <li>
 	 *             If the package name does not adhere to standard naming
 	 *             conventions, as specified <a href=
 	 *             "http://download.oracle.com/javase/tutorial/java/package/namingpkgs.html"
-	 *             >here</a>
+	 *             >here</a></li>
+	 *             <li>If the target NS is not a valid {@link URI}</li>
+	 *             </ul>
 	 */
-	private static void validatePackageName(String targetNameSpace) {
+	private static URI getNormalisedUri(String targetNameSpace) {
 
 		String errMsg = null;
 
@@ -356,16 +364,15 @@ public class ProtomakEngineHelper {
 			throw new IllegalArgumentException(errMsg);
 		}
 
-		if (targetNameSpace.startsWith(".")) {
-			errMsg = "The target name space " + targetNameSpace + " cannot start with a dot (.)";
+		if (targetNameSpace.endsWith(".")) {
+			errMsg = "Target name space cannot end with a dot";
 			LOG.error(errMsg);
 			throw new IllegalArgumentException(errMsg);
 		}
 
-		if (targetNameSpace.endsWith(".")) {
-			errMsg = "The target name space " + targetNameSpace + " cannot end with a dot (.)";
-			LOG.error(errMsg);
-			throw new IllegalArgumentException(errMsg);
+		//E.g. ".foo"
+		if (targetNameSpace.startsWith(".") && !targetNameSpace.startsWith("..")) {
+			targetNameSpace = targetNameSpace.substring(1);
 		}
 
 		if (Character.isDigit(targetNameSpace.charAt(0))) {
@@ -373,6 +380,22 @@ public class ProtomakEngineHelper {
 			LOG.error(errMsg);
 			throw new IllegalArgumentException(errMsg);
 		}
+
+		targetNameSpace = targetNameSpace.replace('-', '_');
+		targetNameSpace = targetNameSpace.toLowerCase().trim();
+
+		URI uri = null;
+
+		try {
+			uri = new URI(targetNameSpace);
+		} catch (URISyntaxException e) {
+			errMsg = "The specified target namespace: " + targetNameSpace
+					+ " does not seem to be a valid URI";
+			LOG.error(errMsg);
+			throw new IllegalArgumentException(errMsg, e);
+		}
+
+		return uri.normalize();
 
 	}
 

@@ -33,7 +33,7 @@ public class ProtomakEngineHelperUnitTest {
 	}
 
 	@Test
-	public void testHttpTargetNsToProtoPackageConversion() {
+	public void testTargetNsToProtoPackageConversion() {
 
 		String expectedPackageName = "simple_one_level.eu.jemos.www";
 
@@ -61,7 +61,7 @@ public class ProtomakEngineHelperUnitTest {
 
 	@Test
 	public void testTargetNsToProtoPackageConversionWithSimpleNameWithSlashes() {
-		String expectedPackageName = "foo.bar.baz";
+		String expectedPackageName = "baz.bar.foo";
 		String packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName("foo/bar/baz");
 		verifyPackageName(expectedPackageName, packageName);
 	}
@@ -71,9 +71,11 @@ public class ProtomakEngineHelperUnitTest {
 		ProtomakEngineHelper.convertTargetNsToProtoPackageName("foo.");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testTargetNsToProtoPackageConversionWithPackageNameStartingWithDot() {
-		ProtomakEngineHelper.convertTargetNsToProtoPackageName(".foo");
+		String expectedPackageName = "foo";
+		String actualPackageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(".foo");
+		verifyPackageName(expectedPackageName, actualPackageName);
 	}
 
 	@Test
@@ -90,12 +92,23 @@ public class ProtomakEngineHelperUnitTest {
 	}
 
 	@Test
-	public void testHttpTargetNsWithUpperCasesToProtoPackageConversion() {
+	public void testTargetNsWithUpperCasesToProtoPackageConversion() {
 
 		String expectedPackageName = "foo.eu.jemos.www";
 
 		String packageName = ProtomakEngineHelper
 				.convertTargetNsToProtoPackageName(ProtomakEngineTestConstants.TEST_TARGET_NAMESPACE_WITH_HTTP_PREFIX_AND_SOME_UPPERCASE);
+		verifyPackageName(expectedPackageName, packageName);
+
+	}
+
+	@Test
+	public void testTargetNsWithRelativeUrl() {
+
+		String expectedPackageName = "my_namespace.baz.bar.foo";
+
+		String packageName = ProtomakEngineHelper
+				.convertTargetNsToProtoPackageName(ProtomakEngineTestConstants.TEST_TARGET_NAMESPACE_WITH_RELATIVE_URL);
 		verifyPackageName(expectedPackageName, packageName);
 
 	}
