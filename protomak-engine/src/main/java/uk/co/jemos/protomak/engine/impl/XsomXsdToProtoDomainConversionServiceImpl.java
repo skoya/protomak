@@ -175,8 +175,6 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 
 		XSComplexType complexType = null;
 
-		String packageName = null;
-
 		while (complexTypesIterator.hasNext()) {
 
 			complexType = complexTypesIterator.next();
@@ -184,10 +182,10 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 				LOG.debug("Skipping anyType: " + complexType.getName());
 				continue;
 			}
-			if (null == packageName) {
+			if (null == proto.getPackage()) {
 
-				packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(complexType
-						.getTargetNamespace());
+				String packageName = ProtomakEngineHelper
+						.convertTargetNsToProtoPackageName(complexType.getTargetNamespace());
 				LOG.info("Proto package will be: " + packageName);
 				proto.setPackage(packageName);
 			}
@@ -231,6 +229,14 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 			messageSuffix++;
 
 			proto.getMessage().add(msgType);
+
+			if (null == proto.getPackage()) {
+
+				String packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(type
+						.getTargetNamespace());
+				LOG.info("Proto package will be: " + packageName);
+				proto.setPackage(packageName);
+			}
 		}
 	}
 
