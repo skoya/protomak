@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/single-element-with-complex-type" xmlns:tns="http://www.jemos.eu/single-element-with-complex-type" elementFormDefault="qualified">
+
+<complexType name="Employee">
+	
+</complexType>
+
+<complexType name="Manager">
+	<complexContent>
+		<extension base="tns:Employee">
+				<sequence>
+					<element name="DirectReports">
+						<complexType>
+							<sequence>
+								<element type="tns:Employee"></element>
+							</sequence>
+						</complexType>
+					</element>
+				</sequence>
+		</extension>
+	</complexContent>
+</complexType>
+</schema>
