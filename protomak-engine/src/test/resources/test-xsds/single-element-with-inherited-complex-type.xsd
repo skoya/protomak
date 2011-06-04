@@ -12,7 +12,7 @@
 					<element name="DirectReports">
 						<complexType>
 							<sequence>
-								<element type="tns:Employee"></element>
+								<element name="employee" type="tns:Employee"></element>
 							</sequence>
 						</complexType>
 					</element>
