@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
+import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestHelper;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 
@@ -193,6 +194,31 @@ public class XsdToProtoDomainUnitTest {
 
 		verifyProtoFilesHaveBeenWritten(outputDir,
 				ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH);
+
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_ONLY_FILE_NAME);
+		Assert.assertNotNull("The expected proto file name cannot be null!", protoFileName);
+
+		File expectedProtoFile = new File(ProtomakEngineTestConstants.EXPECTED_PROTO_DIR
+				+ File.separatorChar + "expected-" + protoFileName);
+		Assert.assertTrue("The expected proto file " + expectedProtoFile.getAbsolutePath()
+				+ " does not exist!", expectedProtoFile.exists());
+
+		String expectedProtoFileContent = ProtomakEngineTestHelper
+				.retrieveFileContent(expectedProtoFile.getAbsolutePath());
+		Assert.assertNotNull("The expected proto file content cannot be null!",
+				expectedProtoFileContent);
+
+		File actualProtoFile = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+				+ File.separatorChar + protoFileName);
+		Assert.assertTrue("The actual proto file: " + actualProtoFile.getAbsolutePath()
+				+ " must exist!", actualProtoFile.exists());
+
+		String actualProtoFileContent = ProtomakEngineTestHelper
+				.retrieveFileContent(actualProtoFile.getAbsolutePath());
+		Assert.assertNotNull("The actual proto file content must exist!", actualProtoFileContent);
+		
+		Assert.assertEquals("The expected and actual proto files are not equal!", expectedProtoFileContent, actualProtoFileContent);
 
 	}
 

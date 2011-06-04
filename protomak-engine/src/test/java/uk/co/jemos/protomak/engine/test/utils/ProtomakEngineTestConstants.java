@@ -13,6 +13,8 @@ import java.io.File;
  */
 public class ProtomakEngineTestConstants {
 
+	
+
 	/** The folder containing the test xsds */
 	public static final String TEST_XSDS_FOLDER = "src/test/resources/test-xsds";
 
@@ -21,6 +23,9 @@ public class ProtomakEngineTestConstants {
 
 	/** The full path to the folder where to put the generated protos. */
 	public static final String PROTOS_OUTPUT_DIR = "target/generated-sources/protos";
+
+	/** The path to the expected proto files directory */
+	public static final String EXPECTED_PROTO_DIR = "src/test/resources/expected-proto-files";
 
 	/** An import string for a proto file. */
 	public static final String PROTO_IMPORT_1 = "uk/co/jemos/proto1.proto";
@@ -31,6 +36,9 @@ public class ProtomakEngineTestConstants {
 	/** A package name for a proto file. */
 	public static final String PROTO_PACKAGE = "uk.co.jemos.protomak.test.unit";
 
+	/** The file name for the multiple-complex-types-only XSD file */
+	public static final String MULTIPLE_COMPLEX_TYPES_ONLY_FILE_NAME = "multiple-complex-types-only.xsd";
+	
 	/** The full path to the XSD to test. */
 	public static final String SIMPLE_ONE_LEVEL_XSD_PATH = TEST_XSDS_FOLDER + File.separatorChar
 			+ "simple-one-level.xsd";
@@ -49,7 +57,7 @@ public class ProtomakEngineTestConstants {
 
 	/** The path to multiple-complex-types-only */
 	public static final String MULTIPLE_COMPLEX_TYPES_XSD_PATH = TEST_XSDS_FOLDER
-			+ File.separatorChar + "multiple-complex-types-only.xsd";
+			+ File.separatorChar + MULTIPLE_COMPLEX_TYPES_ONLY_FILE_NAME;
 
 	/** The path to the anonymous-types XSD file */
 	public static final String ANONYMOUS_TYPES_XSD_PATH = TEST_XSDS_FOLDER + File.separatorChar
