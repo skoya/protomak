@@ -3,12 +3,15 @@
  */
 package uk.co.jemos.protomak.engine.test.unit;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.StringReader;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -217,8 +220,29 @@ public class XsdToProtoDomainUnitTest {
 		String actualProtoFileContent = ProtomakEngineTestHelper
 				.retrieveFileContent(actualProtoFile.getAbsolutePath());
 		Assert.assertNotNull("The actual proto file content must exist!", actualProtoFileContent);
-		
-		Assert.assertEquals("The expected and actual proto files are not equal!", expectedProtoFileContent, actualProtoFileContent);
+
+		BufferedReader expectedReader = new BufferedReader(new StringReader(
+				expectedProtoFileContent));
+
+		BufferedReader actualReader = new BufferedReader(new StringReader(actualProtoFileContent));
+
+		try {
+
+			String expectedLine = null;
+			String actualLine = null;
+
+			while ((expectedLine = expectedReader.readLine()) != null) {
+				actualLine = actualReader.readLine();
+				if (expectedLine.equals("")) {
+					continue;
+				}
+				Assert.assertEquals(expectedLine, actualLine);
+			}
+
+		} finally {
+			IOUtils.closeQuietly(expectedReader);
+			IOUtils.closeQuietly(actualReader);
+		}
 
 	}
 
