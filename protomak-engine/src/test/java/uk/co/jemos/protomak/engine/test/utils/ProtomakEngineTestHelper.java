@@ -4,11 +4,13 @@
 package uk.co.jemos.protomak.engine.test.utils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.apache.commons.io.IOUtils;
 
@@ -75,6 +77,50 @@ public class ProtomakEngineTestHelper {
 
 		return retValue;
 	}
+
+	/**
+	 * It compares expected and actual proto and throws an exception if the
+	 * content does not match.
+	 * 
+	 * @param expectedProtoFileContent
+	 *            The content of the expected proto file.
+	 * @param actualProtoFileContent
+	 *            The content of the actual proto file.
+	 * @throws IOException
+	 *             If an exception occurred while reading the stream.
+	 * @throws AssertionError
+	 *             If a single line of the actual proto file does not match the
+	 *             single line of the expected proto file.
+	 */
+	public static void compareExpectedAndActualProtos(String expectedProtoFileContent,
+			String actualProtoFileContent) throws IOException {
+		BufferedReader expectedReader = new BufferedReader(new StringReader(
+				expectedProtoFileContent));
+
+		BufferedReader actualReader = new BufferedReader(new StringReader(actualProtoFileContent));
+
+		try {
+
+			String expectedLine = null;
+			String actualLine = null;
+
+			while ((expectedLine = expectedReader.readLine()) != null) {
+				actualLine = actualReader.readLine();
+				if (expectedLine.equals("")) {
+					continue;
+				}
+				if (!expectedLine.equals(actualLine)) {
+					throw new AssertionError("The expected and actual line don't match: "
+							+ expectedLine + " vs " + actualLine);
+				}
+			}
+
+		} finally {
+			IOUtils.closeQuietly(expectedReader);
+			IOUtils.closeQuietly(actualReader);
+		}
+	}
+
 	// ------------------->> Getters / Setters
 
 	//------------------->> Private methods
