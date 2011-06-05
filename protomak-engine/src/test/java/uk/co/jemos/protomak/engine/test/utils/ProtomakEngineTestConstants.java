@@ -98,6 +98,12 @@ public class ProtomakEngineTestConstants {
 	/** A relative target name space */
 	public static final String TEST_TARGET_NAMESPACE_WITH_RELATIVE_URL = "../../../foo/bar/baz/my_namespace";
 
+	/** The output folder where to put PROTO XML definition */
+	public static final String PROTO_XML_DEFINITION_OUTPUT_DIR = "target/generated-sources/proto-xml-definition";
+
+	/** The name of the proto metadata definition XML file */
+	public static final String PROTO_XML_DEFINITION_FILE_NAME = "proto-metadata-definition.xml";
+
 	/**
 	 * The path to public static final String
 	 * SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH = null;
