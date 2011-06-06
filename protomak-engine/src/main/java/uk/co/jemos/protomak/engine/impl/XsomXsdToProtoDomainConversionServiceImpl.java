@@ -5,6 +5,7 @@ package uk.co.jemos.protomak.engine.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -123,6 +124,10 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 
 			LOG.info("Processing all elements in the XSD...");
 			manageElements(proto, sset);
+
+			//Sorts the Message Types in order of their names
+			LOG.info("Sorting Message Types based on their names...");
+			Collections.sort(proto.getMessage(), ProtomakEngineConstants.MESSAGE_TYPE_COMPARATOR);
 
 			String protoFileName = ProtomakEngineHelper
 					.extractProtoFileNameFromXsdName(inputFilePath.getName());

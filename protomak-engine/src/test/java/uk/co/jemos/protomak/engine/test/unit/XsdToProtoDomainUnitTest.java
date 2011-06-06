@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
+import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestHelper;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 
@@ -119,80 +120,78 @@ public class XsdToProtoDomainUnitTest {
 	}
 
 	@Test
-	public void testSimpleSingleElementXsd() {
+	public void testSimpleSingleElementXsd() throws Exception {
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
 	@Test
-	public void testSimpleMultipleElementsXsd() {
+	public void testSimpleMultipleElementsXsd() throws Exception {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SIMPLE_MULTIPLE_SIMPLE_ELEMENTS_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.SIMPLE_MULTIPLE_ELEMENTS_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
 	@Test
-	public void testSingleElementWithComplexType() {
+	public void testSingleElementWithComplexType() throws Exception {
 		service.generateProtoFiles(
 				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
 	@Test
-	public void testSingleElementWithInheritedComplexType() {
+	public void testSingleElementWithInheritedComplexType() throws IOException {
 		service.generateProtoFiles(
 				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
-
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH);
-
+		String protoFileName = ProtomakEngineHelper
+			.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_FILE_NAME);
+		
+		verifyExpectedAndActualProto(protoFileName);
 	}
 
 	@Test
-	public void testElementWithComplexAndSimpleTypeWithRestrictions() {
+	public void testElementWithComplexAndSimpleTypeWithRestrictions() throws Exception {
 		service.generateProtoFiles(
 				ProtomakEngineTestConstants.ELEMENT_WITH_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.ELEMENT_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(
-				outputDir,
-				ProtomakEngineTestConstants.ELEMENT_WITH_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
 	@Test
-	public void testSimpleOneLevelXsd() {
+	public void testSimpleOneLevelXsd() throws Exception {
 
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.SIMPLE_ONE_LEVEL_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
@@ -202,22 +201,22 @@ public class XsdToProtoDomainUnitTest {
 		service.generateProtoFiles(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_ONLY_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.MULTIPLE_COMPLEX_TYPES_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 
 	}
 
 	@Test
-	public void testAnonymousTypes() {
+	public void testAnonymousTypes() throws Exception {
 		service.generateProtoFiles(ProtomakEngineTestConstants.ANONYMOUS_TYPES_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
-		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.ANONYMOUS_TYPES_FILE_NAME);
 
-		verifyProtoFilesHaveBeenWritten(outputDir,
-				ProtomakEngineTestConstants.ANONYMOUS_TYPES_XSD_PATH);
+		verifyExpectedAndActualProto(protoFileName);
 	}
 
 	// ------------------->> Getters / Setters
@@ -225,35 +224,39 @@ public class XsdToProtoDomainUnitTest {
 	//------------------->> Private methods
 
 	/**
-	 * It verifies that the output folder has been created and at least one
-	 * proto file has been written to it.
+	 * It verifies that the expected and actual proto files are the same.
 	 * 
-	 * @param simpleSingleElementXsdPath
-	 * 
-	 * @param outputDir
-	 *            The output folder
-	 * @param inputFilePath
-	 *            The input file path
+	 * @param protoFileName
+	 *            The name of the proto file to verify.
+	 * @throws IOException
+	 *             If an IOException occurred while reading the streams.
 	 */
-	private void verifyProtoFilesHaveBeenWritten(File outputDir, String inputFilePath) {
+	private void verifyExpectedAndActualProto(String protoFileName) throws IOException {
 
-		Assert.assertTrue("The output folder must exist!", outputDir.exists());
-		Assert.assertTrue("The output folder must be a folder!", outputDir.isDirectory());
-		File[] listFiles = outputDir.listFiles(filter);
-		Assert.assertNotNull("The list of proto files cannot be null!", listFiles);
-		Assert.assertTrue("There must be at least a .proto file in the output folder",
-				listFiles.length > 0);
+		Assert.assertNotNull("The expected proto file name cannot be null!", protoFileName);
 
-		File inputFile = new File(inputFilePath);
+		File expectedProtoFile = new File(ProtomakEngineTestConstants.EXPECTED_PROTO_DIR
+				+ File.separatorChar + "expected-" + protoFileName);
+		Assert.assertTrue("The expected proto file " + expectedProtoFile.getAbsolutePath()
+				+ " does not exist!", expectedProtoFile.exists());
 
-		String protoFileName = ProtomakEngineHelper.extractProtoFileNameFromXsdName(inputFile
-				.getName());
+		String expectedProtoFileContent = ProtomakEngineTestHelper
+				.retrieveFileContent(expectedProtoFile.getAbsolutePath());
+		Assert.assertNotNull("The expected proto file content cannot be null!",
+				expectedProtoFileContent);
 
-		File protoFile = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
+		File actualProtoFile = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR
 				+ File.separatorChar + protoFileName);
-		Assert.assertTrue("The file: " + protoFile.getAbsolutePath() + " does not exist.",
-				protoFile.exists());
+		Assert.assertTrue("The actual proto file: " + actualProtoFile.getAbsolutePath()
+				+ " must exist!", actualProtoFile.exists());
 
+		String actualProtoFileContent = ProtomakEngineTestHelper
+				.retrieveFileContent(actualProtoFile.getAbsolutePath());
+		Assert.assertNotNull("The actual proto file content must exist!", actualProtoFileContent);
+
+		//Throws AssertionError if it fails
+		ProtomakEngineTestHelper.compareExpectedAndActualProtos(expectedProtoFileContent,
+				actualProtoFileContent);
 	}
 
 	//------------------->> equals() / hashcode() / toString()

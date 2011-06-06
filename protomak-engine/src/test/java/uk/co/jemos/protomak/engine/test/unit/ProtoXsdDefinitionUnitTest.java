@@ -3,18 +3,28 @@
  */
 package uk.co.jemos.protomak.engine.test.unit;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.jemos.podam.api.DataProviderStrategy;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
+import uk.co.jemos.podam.api.RandomDataProviderStrategy;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.xsds.protomak.proto.EnumType;
@@ -42,6 +52,15 @@ public class ProtoXsdDefinitionUnitTest {
 	//------------------->> Constructors
 
 	//------------------->> Public methods
+
+	@Before
+	public void init() {
+		File protoOutputFolder = new File(
+				ProtomakEngineTestConstants.PROTO_XML_DEFINITION_OUTPUT_DIR);
+		if (!protoOutputFolder.exists()) {
+			Assert.assertTrue(protoOutputFolder.mkdirs());
+		}
+	}
 
 	@Test
 	public void testProtoXsd() throws Exception {
@@ -82,6 +101,42 @@ public class ProtoXsdDefinitionUnitTest {
 		JAXBElement<ProtoType> jaxbElement = new ObjectFactory().createProto(proto);
 		marshaller.marshal(jaxbElement, System.out);
 
+		File protoTypeXmlOutputFile = new File(
+				ProtomakEngineTestConstants.PROTO_XML_DEFINITION_OUTPUT_DIR + File.separatorChar
+						+ ProtomakEngineTestConstants.PROTO_XML_DEFINITION_FILE_NAME);
+
+		BufferedOutputStream bos = null;
+		BufferedInputStream bis = null;
+
+		try {
+
+			//Now writes to an output file
+			bos = new BufferedOutputStream(new FileOutputStream(protoTypeXmlOutputFile));
+
+			marshaller.marshal(jaxbElement, bos);
+			bos.flush();
+			bos.close();
+
+			Assert.assertTrue("The proto output file: " + protoTypeXmlOutputFile.getAbsolutePath()
+					+ " must exist!", protoTypeXmlOutputFile.exists());
+
+			Unmarshaller unmarshaller = ctx.createUnmarshaller();
+
+			bis = new BufferedInputStream(new FileInputStream(protoTypeXmlOutputFile));
+
+			JAXBElement<ProtoType> rootProtoTypeJaxbElement = (JAXBElement<ProtoType>) unmarshaller
+					.unmarshal(bis);
+			Assert.assertNotNull("The unmarshalled prototype must exist!", rootProtoTypeJaxbElement);
+			ProtoType actualPrototype = rootProtoTypeJaxbElement.getValue();
+			Assert.assertNotNull("The unmarshalled prototype must exist!", actualPrototype);
+			Assert.assertEquals("The expected and actual prototypes do not match!", proto,
+					actualPrototype);
+
+		} finally {
+			IOUtils.closeQuietly(bos);
+			IOUtils.closeQuietly(bis);
+		}
+
 	}
 
 	// ------------------->> Getters / Setters
@@ -99,12 +154,14 @@ public class ProtoXsdDefinitionUnitTest {
 
 		MessageType msgType = factory.manufacturePojo(MessageType.class);
 
+		DataProviderStrategy randomStrategy = RandomDataProviderStrategy.getInstance();
+
 		List<EnumType> enums = msgType.getEnum();
 		for (int i = 0; i < 5; i++) {
 			EnumType enumType = factory.manufacturePojo(EnumType.class);
 			List<String> values = enumType.getEnumEntry();
 			for (int j = 0; j < 2; j++) {
-				values.add(factory.manufacturePojo(String.class));
+				values.add(randomStrategy.getStringValue());
 			}
 			enums.add(enumType);
 		}

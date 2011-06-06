@@ -3,6 +3,10 @@
  */
 package uk.co.jemos.protomak.engine.utils;
 
+import java.util.Comparator;
+
+import uk.co.jemos.xsds.protomak.proto.MessageType;
+
 /**
  * Constants for Protomak Engine.
  * 
@@ -13,9 +17,13 @@ public class ProtomakEngineConstants {
 
 	//------------------->> Constants
 
-	//------------------->> Instance / Static variables
+	public static final Comparator<MessageType> MESSAGE_TYPE_COMPARATOR = new Comparator<MessageType>() {
 
-	//------------------->> Constructors
+		public int compare(MessageType msgType1, MessageType msgType2) {
+			return msgType1.getName().compareTo(msgType2.getName());
+		}
+
+	};
 
 	/** The package name where all classes are being generated */
 	public static final String GENERATED_CODE_PACKAGE_NAME = "uk.co.jemos.xsds.protomak.proto";
@@ -67,19 +75,11 @@ public class ProtomakEngineConstants {
 	/** The default enum name for anonymous types */
 	public static final String ANONYMOUS_ENUM_DEFAULT_MESSAGE_TYPE_NAME = "AnonymousEnum";
 
+	//------------------->> Constructor
+
 	/** Non instantiable contructor */
 	private ProtomakEngineConstants() {
 		throw new AssertionError();
 	}
-
-	//------------------->> Public methods
-
-	// ------------------->> Getters / Setters
-
-	//------------------->> Private methods
-
-	//------------------->> equals() / hashcode() / toString()
-
-	//------------------->> Inner classes
 
 }
