@@ -47,6 +47,10 @@ public class ProtomakEngineTestConstants {
 	public static final String SINGLE_ELEMENT_WITH_COMPLEX_TYPE_XSD_PATH = TEST_XSDS_FOLDER
 			+ File.separatorChar + "single-element-with-complex-type.xsd";
 
+	/** The path to single-element-with-complex-type */
+	public static final String SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH = TEST_XSDS_FOLDER
+			+ File.separatorChar + "single-element-with-inherited-complex-type.xsd";
+
 	/** The path to multiple-complex-types-only */
 	public static final String MULTIPLE_COMPLEX_TYPES_XSD_PATH = TEST_XSDS_FOLDER
 			+ File.separatorChar + "multiple-complex-types-only.xsd";

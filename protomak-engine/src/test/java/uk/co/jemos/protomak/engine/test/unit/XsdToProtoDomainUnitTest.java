@@ -157,6 +157,19 @@ public class XsdToProtoDomainUnitTest {
 	}
 
 	@Test
+	public void testSingleElementWithInheritedComplexType() {
+		service.generateProtoFiles(
+				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		File outputDir = new File(ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		verifyProtoFilesHaveBeenWritten(outputDir,
+				ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH);
+
+	}
+
+	@Test
 	public void testElementWithComplexAndSimpleTypeWithRestrictions() {
 		service.generateProtoFiles(
 				ProtomakEngineTestConstants.ELEMENT_WITH_COMPLEX_AND_SIMPLE_TYPE_WITH_RESTRICTIONS_XSD_PATH,
