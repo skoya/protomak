@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/multiple-single-elements" xmlns:tns="http://www.jemos.eu/multiple-single-elements" elementFormDefault="qualified">
+
+    <element name="intElement" type="int"></element>
+    
+    <element name="booleanElement" type="boolean"></element>
+
+</schema>

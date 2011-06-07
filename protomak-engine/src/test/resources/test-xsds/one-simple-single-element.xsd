@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/one-simple-single-element" xmlns:tns="http://www.jemos.eu/one-simple-single-element" elementFormDefault="qualified">
+
+    <element name="client" type="string"></element>
+
+</schema>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.co.uk/xsds/protomak/proto"
+		xmlns:tns="http://www.jemos.co.uk/xsds/protomak/proto" elementFormDefault="qualified">
+
+	<!-- 
+	  This XSD has been created following the .proto Language specifications at the following
+	  address: http://code.google.com/apis/protocolbuffers/docs/proto.html
+	 -->
+
+    <element name="proto" type="tns:ProtoType"></element>
+
+    <complexType name="ProtoType">
+    	<sequence>
+    		<element name="import" type="string" maxOccurs="unbounded"
+    			minOccurs="0">
+    		</element>
+    		<element name="package" type="string" maxOccurs="1"
+    			minOccurs="0">
+    		</element>
+    		<element name="message" type="tns:MessageType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="extend" type="tns:ExtendType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="service" type="tns:ServiceType"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<element name="option" type="tns:OptionElementType" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>	
+
+	<!-- The values for the attribute inside a Message. It can either be required or optional -->
+	<simpleType name="MessageAttributeOptionalType">
+		<restriction base="string">
+			<enumeration value="required"></enumeration>
+			<enumeration value="optional"></enumeration>
+			<enumeration value="repeated"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<!-- This are the proto types -->
+	<simpleType name="ProtoRuntimeType">
+		<restriction base="string">
+			<enumeration value="double"></enumeration>
+			<enumeration value="float"></enumeration>
+			<enumeration value="int32"></enumeration>
+			<enumeration value="int64"></enumeration>
+			<enumeration value="uint32"></enumeration>
+			<enumeration value="uint64"></enumeration>
+			<enumeration value="sint32"></enumeration>
+			<enumeration value="sint64"></enumeration>
+			<enumeration value="fixed32"></enumeration>
+			<enumeration value="fixed64"></enumeration>
+			<enumeration value="sfixed32"></enumeration>
+			<enumeration value="sfixed64"></enumeration>
+			<enumeration value="bool"></enumeration>
+			<enumeration value="string"></enumeration>
+			<enumeration value="bytes"></enumeration>
+		</restriction>
+	</simpleType>
+
+	<complexType name="MessageAttributeType">
+		<sequence>
+			<element name="runtimeType" type="tns:MessageRuntimeType"></element>
+		</sequence>
+		<attribute name="optionality"
+			type="tns:MessageAttributeOptionalType" use="required">
+		</attribute>
+		<attribute name="name" type="string" use="required"></attribute>
+		<attribute name="index" type="int" use="required"></attribute>
+		<attribute name="defaultValue" type="string" use="optional"></attribute>
+	</complexType>
+
+	<complexType name="MessageType">
+		<sequence>
+			<element name="msgAttribute" type="tns:MessageAttributeType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="enum" type="tns:EnumType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="nestedMessage" type="tns:MessageType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="extensions" type="tns:ExtensionType"
+				maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="extend" type="tns:ExtendType" maxOccurs="unbounded" minOccurs="0"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="EnumType">
+		<sequence>
+			<element name="enumEntry" type="string" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+
+
+	<complexType name="MessageRuntimeType">
+		<all>
+			<element name="protoType" type="tns:ProtoRuntimeType" ></element>
+			<element name="customType" type="string"></element>
+		</all>
+	</complexType>
+
+	<complexType name="ExtensionType">
+		<attribute name="fromIndex" type="int" use="required"></attribute>
+		<attribute name="toIndex" type="int" use="required"></attribute>
+	</complexType>
+
+	<complexType name="ExtendType">
+		<sequence>
+			<element name="extendAttribute" type="tns:MessageAttributeType"></element>
+		</sequence>
+		<attribute name="messageName" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="ServiceMethodType">
+		<attribute name="serviceName" type="string" use="required"></attribute>
+		<attribute name="messageRequestName" type="string" use="required"></attribute>
+		<attribute name="messageResponseName" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="ServiceType">
+		<sequence>
+			<element name="serviceDefinition" type="tns:ServiceMethodType" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+		<attribute name="name" type="string" use="required"></attribute>
+	</complexType>
+
+	<complexType name="OptionElementType">
+		<attribute name="name" type="tns:OptionValueType"
+			use="required">
+		</attribute>
+		<attribute name="value" type="string"></attribute>
+	</complexType>
+
+	<simpleType name="OptionValueType">
+		<restriction base="string">
+			<enumeration value="java_package"></enumeration>
+			<enumeration value="java_outer_classname"></enumeration>
+			<enumeration value="optimize_for"></enumeration>
+		</restriction>
+	</simpleType>
+</schema>
