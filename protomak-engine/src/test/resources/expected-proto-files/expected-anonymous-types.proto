@@ -3,7 +3,7 @@
 
 package anonymous_types.eu.jemos.www
 
-message DefaultMessage1 {
+message ElementWithAnonymousType {
 	enum AnonymousEnum1 {
 		A = 1;
 		B = 2;

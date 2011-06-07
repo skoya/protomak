@@ -3,7 +3,7 @@
 
 package element_complex_and_simple_type_with_restriction.eu.jemos.www
 
-message DefaultMessage1 {
+message Product {
 	required ProductType product = 1;
 }
 

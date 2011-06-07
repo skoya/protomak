@@ -48,8 +48,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 	/**
 	 * {@inheritDoc}
 	 */
-	public MessageType processComplexType(List<MessageType> protoMessages, XSType type)
-			throws ProtomakXsdToProtoConversionError {
+	public MessageType processComplexType(List<MessageType> protoMessages, XSType type,
+			String inputPath) throws ProtomakXsdToProtoConversionError {
 
 		LOG.info("Processing type: " + type.getName() + ". Is it complex? " + type.isComplexType());
 
@@ -58,9 +58,11 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		//Simple types don't have attributes
 		if (type.isComplexType()) {
 			XSComplexType complexType = type.asComplexType();
-			retValue.setName(complexType.getName());
+			String messageTypeName = ProtomakEngineHelper.getMessageTypeName(complexType.getName(),
+					inputPath);
+			retValue.setName(messageTypeName);
 
-			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue);
+			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue, inputPath);
 
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);

@@ -71,6 +71,9 @@ public class TypeVisitor implements XSVisitor {
 	/** The collection of proto messages */
 	private List<MessageType> protoMessages;
 
+	/** The full path to the XSD file which originated the request */
+	private String inputPath;
+
 	/**
 	 * Full constructor.
 	 * 
@@ -83,10 +86,13 @@ public class TypeVisitor implements XSVisitor {
 	 * @param messageType
 	 *            The MessageType to be filled for this complex type, or null if
 	 *            this is the root message type.
+	 * @param inputPath
+	 *            The full path to the XSD which originated the request
 	 */
-	public TypeVisitor(List<MessageType> protoMessages, MessageType messageType) {
+	public TypeVisitor(List<MessageType> protoMessages, MessageType messageType, String inputPath) {
 		this.protoMessages = protoMessages;
 		this.messageType = messageType;
+		this.inputPath = inputPath;
 	}
 
 	public void wildcard(XSWildcard wc) {
@@ -238,7 +244,7 @@ public class TypeVisitor implements XSVisitor {
 	public void complexType(XSComplexType type) {
 		messageType.getNestedMessage().add(
 				XsomDefaultComplexTypeProcessor.getInstance().processComplexType(protoMessages,
-						type));
+						type, inputPath));
 
 	}
 
