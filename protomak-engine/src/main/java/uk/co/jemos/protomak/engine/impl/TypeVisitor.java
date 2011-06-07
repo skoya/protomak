@@ -212,8 +212,7 @@ public class TypeVisitor implements XSVisitor {
 	}
 
 	public void empty(XSContentType empty) {
-		XsomDefaultComplexTypeProcessor.LOG.debug("In visitor: " + this
-				+ ". Exiting for empty content type.");
+		protoMessages.add(messageType);
 	}
 
 	public void annotation(XSAnnotation ann) {

@@ -3,6 +3,8 @@
 
 package single_element_with_complex_type.eu.jemos.www
 
-message Manager {
+message Employee {
 }
 
+message Manager {
+}
