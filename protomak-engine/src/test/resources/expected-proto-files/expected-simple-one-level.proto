@@ -4,11 +4,11 @@
 package simple_one_level.eu.jemos.www
 
 message ClientType {
-	required sfixed_32 phoneNumber = 1;
+	required bool active = 5;
+	required string firstName = 4;
 	required sfixed_32 id = 2;
 	required string lastsName = 3;
-	required string firstName = 4;
-	required bool active = 5;
+	required sfixed_32 phoneNumber = 1;
 }
 
 message ClientsType {

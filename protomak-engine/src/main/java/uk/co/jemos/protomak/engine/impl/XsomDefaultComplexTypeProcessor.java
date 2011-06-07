@@ -4,11 +4,13 @@
 package uk.co.jemos.protomak.engine.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
@@ -68,6 +70,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			complexType.getContentType().visit(visitor);
 			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
 					visitor.getMessageAttributeOrdinal(), complexType);
+			Collections.sort(messageAttributeTypes,
+					ProtomakEngineConstants.MESSAGE_ATTRIBUTE_COMPARATOR);
 			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 
 		}

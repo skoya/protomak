@@ -5,6 +5,7 @@ package uk.co.jemos.protomak.engine.utils;
 
 import java.util.Comparator;
 
+import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
 /**
@@ -21,6 +22,14 @@ public class ProtomakEngineConstants {
 
 		public int compare(MessageType msgType1, MessageType msgType2) {
 			return msgType1.getName().compareTo(msgType2.getName());
+		}
+
+	};
+
+	public static final Comparator<MessageAttributeType> MESSAGE_ATTRIBUTE_COMPARATOR = new Comparator<MessageAttributeType>() {
+
+		public int compare(MessageAttributeType msgAttrType1, MessageAttributeType msgAttrType2) {
+			return msgAttrType1.getName().compareTo(msgAttrType2.getName());
 		}
 
 	};
