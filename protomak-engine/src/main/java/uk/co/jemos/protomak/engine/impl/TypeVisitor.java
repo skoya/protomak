@@ -100,7 +100,7 @@ public class TypeVisitor implements XSVisitor {
 	}
 
 	public void modelGroup(XSModelGroup group) {
-		XsomDefaultComplexTypeProcessor.LOG.debug("XS Visitor: In Model group");
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In Model group line: " + group.getLocator().getLineNumber() + " column: " + group.getLocator().getColumnNumber());
 		XSParticle[] children = group.getChildren();
 		for (XSParticle xsParticle : children) {
 			int minOccurs = xsParticle.getMinOccurs();
@@ -121,11 +121,10 @@ public class TypeVisitor implements XSVisitor {
 	}
 
 	public void elementDecl(XSElementDecl element) {
-
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In elementDecl, element name: " + element.getName());
 		String elementType = element.getType().getName();
 
 		if (element.getType().isSimpleType()) {
-
 			// If this is a custom simple type, we need to get the element from the XSD
 			ProtoRuntimeType protoRuntimeType = ProtomakEngineHelper.XSD_TO_PROTO_TYPE_MAPPING
 					.get(elementType);
@@ -146,7 +145,7 @@ public class TypeVisitor implements XSVisitor {
 
 			//We assume the complex type is declared within the schema. This probably 
 			//needs to change if the complex type is declared externally
-			XSType elementDeclaredType = element.getOwnerSchema().getType(elementType);
+			XSType elementDeclaredType = element.getType();
 			if (null != elementDeclaredType) {
 
 				if (elementDeclaredType.isComplexType()) {
@@ -156,13 +155,12 @@ public class TypeVisitor implements XSVisitor {
 					msgAttributeType.setOptionality(attributeOptionality);
 					msgAttributeType.setIndex(messageAttributeOrdinal);
 					MessageRuntimeType runtimeType = new MessageRuntimeType();
-					runtimeType.setCustomType(elementDeclaredType.getName());
+					runtimeType.setCustomType(elementDeclaredType.isGlobal() ? elementDeclaredType.getName() : element.getName());					
 					msgAttributeType.setRuntimeType(runtimeType);
 					messageType.getMsgAttribute().add(msgAttributeType);
 
 				}
 			}
-
 		}
 
 	}
