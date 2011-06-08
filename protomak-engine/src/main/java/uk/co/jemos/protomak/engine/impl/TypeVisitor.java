@@ -117,7 +117,8 @@ public class TypeVisitor implements XSVisitor {
 
 		//Let's clean after ourselves
 		protoMessages.add(messageType);
-
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In Model added message: " + messageType);
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: Exit Model group line: " + group.getLocator().getLineNumber() + " column: " + group.getLocator().getColumnNumber());		
 	}
 
 	public void elementDecl(XSElementDecl element) {
@@ -202,15 +203,16 @@ public class TypeVisitor implements XSVisitor {
 	}
 
 	public void particle(XSParticle particle) {
-		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In particle");
 		XSTerm term = particle.getTerm();
 		term.visit(this);
-		XsomDefaultComplexTypeProcessor.LOG.debug("Exiting from particle. messageType name = "
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: Exiting from particle. messageType name = "
 				+ messageType.getName());
 	}
 
 	public void empty(XSContentType empty) {
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In empty");
 		protoMessages.add(messageType);
+		XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: Exit empty");		
 	}
 
 	public void annotation(XSAnnotation ann) {

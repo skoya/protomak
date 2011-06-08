@@ -9,10 +9,13 @@ import java.util.List;
 
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.ExtendType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
+import com.sun.xml.bind.AnyTypeAdapter;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSType;
@@ -59,9 +62,17 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		if (type.isComplexType()) {
 			XSComplexType complexType = type.asComplexType();
 			retValue.setName(complexType.getName());
-
 			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue);
 
+			//Determine if the complex type extends another type other than the default anyType
+			XSType baseType = complexType.getBaseType();
+			if (baseType != null && baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME))
+			{
+				LOG.info("Processing type: " + type.getName() + " extends " + baseType.getName());
+				ExtendType extend = new ExtendType();
+				extend.setMessageName(baseType.getName());
+			}
+			
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);
 			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
