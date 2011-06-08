@@ -16,7 +16,6 @@ import uk.co.jemos.xsds.protomak.proto.ExtendType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
-import com.sun.xml.bind.AnyTypeAdapter;
 import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSType;
@@ -69,19 +68,18 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 			//Determine if the complex type extends another type other than the default anyType
 			XSType baseType = complexType.getBaseType();
-			if (baseType != null && baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME))
-			{
+			if (baseType != null
+					&& baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
 				LOG.info("Processing type: " + type.getName() + " extends " + baseType.getName());
 				ExtendType extend = new ExtendType();
 				extend.setMessageName(baseType.getName());
 			}
-			
+
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);
 			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
 					visitor.getMessageAttributeOrdinal(), complexType);
-			Collections.sort(messageAttributeTypes,
-					ProtomakEngineConstants.MESSAGE_ATTRIBUTE_COMPARATOR);
+
 			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 
 		}
@@ -117,9 +115,13 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			complexTypeAttribute = attributeUsesIterator.next();
 			messageAttributeType = ProtomakEngineHelper.convertXsomAttributeToMessageAttributeType(
 					protoCounter, complexTypeAttribute);
-			protoCounter++;
 			attributes.add(messageAttributeType);
+		}
 
+		Collections.sort(attributes, ProtomakEngineConstants.MESSAGE_ATTRIBUTE_COMPARATOR);
+
+		for (MessageAttributeType attr : attributes) {
+			attr.setIndex(protoCounter++);
 		}
 
 		return attributes;
