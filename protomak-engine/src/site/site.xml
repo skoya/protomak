@@ -43,6 +43,7 @@
       </links>
       
       <menu name="Getting Started">
+        <item name="Overall Documentation" href="../index.html" />
       	<item name="Home" href="./index.html" />
       	<item name="Downloads" href="./downloads.html" />		
       	<item name="How to contribute" href="./how-to-contribute.html" />

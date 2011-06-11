@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>protomak</name>
+	<name>protomak-engine</name>
 	<description>This is PROTOMAK engine to convert integration technology files such as XML and Jonas into .proto files</description>
 	<url>http://www.jemos.eu/projects/protomak/index.html</url>
 
@@ -100,6 +100,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<distributionManagement>
+	  <site>
+	    <id>www.jemos.eu/protomak</id>
+	    <url>scp://tedonema@thor/home/tedonema/runtime/www/projects/protomak/protomak-engine</url>
+	  </site>
+	</distributionManagement>
 
 	<build>
 		<plugins>

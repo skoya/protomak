@@ -6,13 +6,16 @@
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-	</parent>
-
+	</parent>	
 
 	<groupId>uk.co.jemos.protomak</groupId>
 	<artifactId>protomak-documentation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	
+	<modules>
+	  <module>../protomak-engine</module>
+	</modules>
 
 	<name>protomak-documentation</name>
 	<description>This is the overall documentation for PROTOMAK</description>
@@ -100,6 +103,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<distributionManagement>
+	  <site>
+	    <id>www.jemos.eu/protomak</id>
+	    <url>scp://tedonema@thor/home/tedonema/runtime/www/projects/protomak</url>
+	  </site>
+	</distributionManagement>
 
 	<build>
 		<plugins>			
