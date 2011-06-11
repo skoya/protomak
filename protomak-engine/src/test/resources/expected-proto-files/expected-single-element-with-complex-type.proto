@@ -10,7 +10,7 @@ message ComplexType {
 	required string requiredUniqueElement = 4;
 }
 
-message DefaultMessage1 {
+message ComplexType0 {
 	required ComplexType complexType = 1;
 }
 

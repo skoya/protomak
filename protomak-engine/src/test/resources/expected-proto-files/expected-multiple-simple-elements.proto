@@ -3,11 +3,11 @@
 
 package xmlschema.2001.org.w3.www
 
-message DefaultMessage1 {
-	required sfixed_32 intElement = 1;
+message BooleanElement {
+	required bool booleanElement = 2;
 }
 
-message DefaultMessage2 {
-	required bool booleanElement = 2;
+message IntElement {
+	required sfixed_32 intElement = 1;
 }
 

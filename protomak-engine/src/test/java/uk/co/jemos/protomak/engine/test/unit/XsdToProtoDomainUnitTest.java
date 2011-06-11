@@ -4,7 +4,6 @@
 package uk.co.jemos.protomak.engine.test.unit;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
 import junit.framework.Assert;
@@ -22,7 +21,6 @@ import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
 import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImpl;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestConstants;
 import uk.co.jemos.protomak.engine.test.utils.ProtomakEngineTestHelper;
-import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
 
 import com.sun.xml.xsom.parser.XSOMParser;
@@ -38,14 +36,6 @@ import com.sun.xml.xsom.parser.XSOMParser;
 public class XsdToProtoDomainUnitTest {
 
 	//------------------->> Constants
-
-	/** A filter to extract .proto files from a folder */
-	private static final FilenameFilter filter = new FilenameFilter() {
-
-		public boolean accept(File dir, String name) {
-			return name.endsWith(ProtomakEngineConstants.PROTO_FILE_EXTENSION_NAME);
-		}
-	};
 
 	//------------------->> Instance / Static variables
 
@@ -164,8 +154,8 @@ public class XsdToProtoDomainUnitTest {
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
 		String protoFileName = ProtomakEngineHelper
-			.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_FILE_NAME);
-		
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_FILE_NAME);
+
 		verifyExpectedAndActualProto(protoFileName);
 	}
 

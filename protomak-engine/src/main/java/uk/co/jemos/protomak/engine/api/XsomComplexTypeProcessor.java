@@ -32,12 +32,14 @@ public interface XsomComplexTypeProcessor {
 	 * 
 	 * @param complexType
 	 *            The complex type to convert into a message type.
+	 * @param inputPath
+	 *            The full path to the input XSD file
 	 * @return A {@link MessageType}
 	 * @throws ProtomakXsdToProtoConversionError
 	 *             If an exception occurred while converting a
 	 *             {@link XSComplexType} into a {@link MessageType}
 	 */
-	public MessageType processComplexType(List<MessageType> protoMessages, XSType complexType)
-			throws ProtomakXsdToProtoConversionError;
+	public MessageType processComplexType(List<MessageType> protoMessages, XSType complexType,
+			String inputPath) throws ProtomakXsdToProtoConversionError;
 
 }

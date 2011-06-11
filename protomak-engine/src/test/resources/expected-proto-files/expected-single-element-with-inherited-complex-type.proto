@@ -7,4 +7,6 @@ message Employee {
 }
 
 message Manager {
+	required DirectReports DirectReports = 1;
 }
+

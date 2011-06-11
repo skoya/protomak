@@ -3,7 +3,7 @@
 
 package xmlschema.2001.org.w3.www
 
-message DefaultMessage1 {
+message Client {
 	required string client = 1;
 }
 

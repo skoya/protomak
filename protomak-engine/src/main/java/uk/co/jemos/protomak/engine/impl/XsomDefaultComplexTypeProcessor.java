@@ -4,12 +4,15 @@
 package uk.co.jemos.protomak.engine.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import uk.co.jemos.protomak.engine.api.XsomComplexTypeProcessor;
 import uk.co.jemos.protomak.engine.exceptions.ProtomakXsdToProtoConversionError;
+import uk.co.jemos.protomak.engine.utils.ProtomakEngineConstants;
 import uk.co.jemos.protomak.engine.utils.ProtomakEngineHelper;
+import uk.co.jemos.xsds.protomak.proto.ExtendType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
 import uk.co.jemos.xsds.protomak.proto.MessageType;
 
@@ -48,8 +51,8 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 	/**
 	 * {@inheritDoc}
 	 */
-	public MessageType processComplexType(List<MessageType> protoMessages, XSType type)
-			throws ProtomakXsdToProtoConversionError {
+	public MessageType processComplexType(List<MessageType> protoMessages, XSType type,
+			String inputPath) throws ProtomakXsdToProtoConversionError {
 
 		LOG.info("Processing type: " + type.getName() + ". Is it complex? " + type.isComplexType());
 
@@ -58,14 +61,25 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		//Simple types don't have attributes
 		if (type.isComplexType()) {
 			XSComplexType complexType = type.asComplexType();
-			retValue.setName(complexType.getName());
+			String messageTypeName = ProtomakEngineHelper.getMessageTypeName(complexType.getName(),
+					inputPath);
+			retValue.setName(messageTypeName);
+			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue, inputPath);
 
-			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue);
+			//Determine if the complex type extends another type other than the default anyType
+			XSType baseType = complexType.getBaseType();
+			if (baseType != null
+					&& baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
+				LOG.info("Processing type: " + type.getName() + " extends " + baseType.getName());
+				ExtendType extend = new ExtendType();
+				extend.setMessageName(baseType.getName());
+			}
 
 			//The visitor fills in the values
 			complexType.getContentType().visit(visitor);
 			List<MessageAttributeType> messageAttributeTypes = retrieveComplexTypeAttributes(
 					visitor.getMessageAttributeOrdinal(), complexType);
+
 			retValue.getMsgAttribute().addAll(messageAttributeTypes);
 
 		}
@@ -101,9 +115,13 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			complexTypeAttribute = attributeUsesIterator.next();
 			messageAttributeType = ProtomakEngineHelper.convertXsomAttributeToMessageAttributeType(
 					protoCounter, complexTypeAttribute);
-			protoCounter++;
 			attributes.add(messageAttributeType);
+		}
 
+		Collections.sort(attributes, ProtomakEngineConstants.MESSAGE_ATTRIBUTE_COMPARATOR);
+
+		for (MessageAttributeType attr : attributes) {
+			attr.setIndex(protoCounter++);
 		}
 
 		return attributes;

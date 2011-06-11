@@ -120,10 +120,10 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 			}
 
 			LOG.info("Processing all complex types in the XSD...");
-			manageComplexTypes(proto, sset);
+			manageComplexTypes(proto, sset, inputPath);
 
 			LOG.info("Processing all elements in the XSD...");
-			manageElements(proto, sset);
+			manageElements(proto, sset, inputPath);
 
 			//Sorts the Message Types in order of their names
 			LOG.info("Sorting Message Types based on their names...");
@@ -171,8 +171,10 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 	 *            The proto object
 	 * @param schema
 	 *            The representation of the XSD Schema
+	 * @param inputPath
+	 *            The full path to the XSD file
 	 */
-	private void manageComplexTypes(ProtoType proto, XSSchemaSet schema) {
+	private void manageComplexTypes(ProtoType proto, XSSchemaSet schema, String inputPath) {
 
 		List<MessageType> protoMessages = proto.getMessage();
 
@@ -195,7 +197,7 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 				proto.setPackage(packageName);
 			}
 			LOG.debug("Processing complex type: " + complexType.getName());
-			complexTypeProcessor.processComplexType(protoMessages, complexType);
+			complexTypeProcessor.processComplexType(protoMessages, complexType, inputPath);
 
 		}
 
@@ -210,8 +212,10 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 	 *            The root proto object
 	 * @param schema
 	 *            The XSD schema representation
+	 * @param inputPath
+	 *            The full path to the XSD file
 	 */
-	private void manageElements(ProtoType proto, XSSchemaSet schema) {
+	private void manageElements(ProtoType proto, XSSchemaSet schema, String inputPath) {
 		//Iterates over the elements
 		Iterator<XSElementDecl> declaredElementsIterator = schema.iterateElementDecls();
 		int messageSuffix = 1;
@@ -221,11 +225,13 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 			XSType type = element.getType();
 			if (type.isLocal()) {
 				LOG.debug("Type for element: " + element.getName() + " is local");
-				TypeVisitor visitor = new TypeVisitor(proto.getMessage(), msgType);
+				TypeVisitor visitor = new TypeVisitor(proto.getMessage(), msgType, inputPath);
 				type.visit(visitor);
 			}
 
-			msgType.setName(ProtomakEngineConstants.DEFAULT_MESSAGE_NAME + messageSuffix);
+			String nameForAnonymousType = ProtomakEngineHelper.getMessageTypeName(
+					element.getName(), inputPath);
+			msgType.setName(nameForAnonymousType);
 			List<MessageAttributeType> msgAttributes = msgType.getMsgAttribute();
 			MessageAttributeType msgAttrType = ProtomakEngineHelper.getMessageAttribute(element,
 					messageSuffix, MessageAttributeOptionalType.REQUIRED);

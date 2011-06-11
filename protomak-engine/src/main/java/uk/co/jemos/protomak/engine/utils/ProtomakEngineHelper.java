@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeOptionalType;
 import uk.co.jemos.xsds.protomak.proto.MessageAttributeType;
@@ -37,6 +39,9 @@ public class ProtomakEngineHelper {
 			.getLogger(ProtomakEngineHelper.class);
 
 	//------------------->> Instance / Static variables
+
+	/** A repository of anonymous type names bound to the XSD input file name */
+	private static final ConcurrentMap<String, String> ANONYMOUS_TYPES_CACHE = new ConcurrentHashMap<String, String>();
 
 	/** Mapping between XSD and Proto types */
 	public static final Map<String, ProtoRuntimeType> XSD_TO_PROTO_TYPE_MAPPING = new HashMap<String, ProtoRuntimeType>();
@@ -399,7 +404,63 @@ public class ProtomakEngineHelper {
 
 	}
 
+	/**
+	 * It retrieves a name for an anonymous type, guaranteeing uniqueness for
+	 * duplicates.
+	 * 
+	 * @param candidateName
+	 *            A candidate name for a message type
+	 * 
+	 * @param inputPath
+	 *            The full path to the XSD input file which originated the
+	 *            request
+	 * @return A name for an anonymous type, guaranteeing that it is unique per
+	 *         proto file.
+	 */
+	public static String getMessageTypeName(String candidateName, String inputPath) {
+
+		//Guarantees multi-threading support
+		inputPath = inputPath.replace('\\', '/');//I prefer a normalised URL
+		String capitalisedName = capitaliseString(candidateName);
+		String key = inputPath + capitalisedName;
+		String retValue = ANONYMOUS_TYPES_CACHE.get(key);
+		if (retValue == null) {
+			String added = ANONYMOUS_TYPES_CACHE.putIfAbsent(key, capitalisedName);
+			if (added != null) {
+				retValue = added;
+			} else {
+				retValue = capitalisedName;
+			}
+		} else {
+			int idx = 0;
+			key = inputPath + capitalisedName + idx;
+			String value = capitalisedName + idx;
+			while (ANONYMOUS_TYPES_CACHE.containsKey(key)) {
+				idx++;
+				key = inputPath + capitalisedName + idx;
+				value = capitalisedName + idx;
+			}
+			String added = ANONYMOUS_TYPES_CACHE.putIfAbsent(key, value);
+			if (added != null) {
+				retValue = added;
+			} else {
+				retValue = value;
+			}
+		}
+
+		return retValue;
+	}
+
 	//------------------->> equals() / hashcode() / toString()
+
+	/**
+	 * @param retValue
+	 * @return
+	 */
+	public static String capitaliseString(String retValue) {
+		retValue = Character.toUpperCase(retValue.charAt(0)) + retValue.substring(1);
+		return retValue;
+	}
 
 	//------------------->> Inner classes
 
