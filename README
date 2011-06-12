@@ -1,3 +1,9 @@
+To build the documentation:
+
+$ cd protomak-documentation
+$ mvn clean site:site
+
+
 To build PROTOMAK: 
 
 $ cd protomak-engine
