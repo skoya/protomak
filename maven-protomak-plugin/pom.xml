@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<groupId>uk.co.jemos.protomak</groupId>
+	<artifactId>maven-protomak-plugin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>maven-plugin</packaging>
+
+	<name>maven-protomak-plugin</name>
+	<url>http://maven.apache.org</url>
+
+	<licenses>
+		<license>
+			<name>Protomak runs under the MIT license</name>
+			<url>LICENSE.txt</url>
+		</license>
+	</licenses>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://www.jemos.eu/jira</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://www.jemos.eu/jenkins</url>
+	</ciManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>protomak - Google Groups</name>
+			<subscribe>http://groups.google.com/group/protomak</subscribe>
+			<unsubscribe>http://groups.google.com/group/protomak</unsubscribe>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<url>scm:git clone git://github.com/mtedone/protomak.git</url>
+		<connection>scm:git clone git://github.com/mtedone/protomak.git</connection>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>mtedone</id>
+			<name>Marco Tedone</name>
+			<email>marco.tedone@gmail.com</email>
+			<organization>Jemos</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Project Lead</role>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>
+			<url>http://tedone.typepad.com/blog/</url>
+		</developer>
+		<developer>
+			<id>paulwhitby</id>
+			<name>Paul Whitby</name>
+			<email>paulwhitby@btconnect.com</email>
+			<organization>Jemos</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>
+		</developer>
+		<developer>
+			<id>sharatkoya</id>
+			<name>Sharat Koya</name>
+			<email>sharat.koya@me.com</email>
+			<organization>Jemos</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>
+		</developer>
+		<developer>
+			<id>edwilde</id>
+			<name>Ed Wilde</name>
+			<email>TBD</email>
+			<organization>Jemos</organization>
+			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
+			<roles>
+				<role>Team Member</role>
+			</roles>
+			<timezone>UTC</timezone>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>uk.co.jemos.protomak</groupId>
+		  <artifactId>protomak-engine</artifactId>
+		  <version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>2.5.1</version>
+			</plugin>
+		</plugins>
+	</build>
+</project>
