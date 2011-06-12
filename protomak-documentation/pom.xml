@@ -6,16 +6,16 @@
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
-	</parent>	
+	</parent>
 
 	<groupId>uk.co.jemos.protomak</groupId>
 	<artifactId>protomak-documentation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<modules>
-	  <module>../protomak-engine</module>
-	  <module>../maven-protomak-plugin</module>
+		<module>../protomak-engine</module>
+		<module>../maven-protomak-plugin</module>
 	</modules>
 
 	<name>protomak-documentation</name>
@@ -104,16 +104,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<distributionManagement>
-	  <site>
-	    <id>www.jemos.eu/protomak</id>
-	    <url>scp://tedonema@thor/home/tedonema/runtime/www/projects/protomak</url>
-	  </site>
+		<site>
+			<id>www.jemos.eu/protomak</id>
+			<url>scp://tedonema@thor/home/tedonema/runtime/www/projects/protomak</url>
+		</site>
 	</distributionManagement>
 
 	<build>
-		<plugins>			
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -140,7 +140,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
 
 	<reporting>
 		<outputDirectory>${basedir}/target/site</outputDirectory>
@@ -162,6 +162,24 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<attach>true</attach>
+					<show>private</show>
+					<doctitle>Jemos protomak API - Version: ${project.version}</doctitle>
+					<footer>Jemos 2002 - 2011: All Rights Reserved. protomak runs under
+						the MIT license</footer>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>surefire-report-maven-plugin</artifactId>
+				<version>2.0-beta-1</version>
+				<inherited>true</inherited>
 			</plugin>
 		</plugins>
 	</reporting>

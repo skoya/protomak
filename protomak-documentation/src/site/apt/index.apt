@@ -24,4 +24,10 @@ Protomak Components
 
   Currently Protomak is made of the following components: 
   
+  * {{{../protomak-engine/index.html} Protomak Engine}}. This is the module which is in charge
+  of creating proto files from different source types, such as XSDs, Jonas, POJOs, etc.
+  
+  * {{{../maven-protomak-plugin/index.html} Maven Protomak Plugin}}. This is a Maven Plugin to 
+  use Protomak from within your Maven projects
+  
   

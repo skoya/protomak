@@ -49,6 +49,7 @@
       
       <menu name="Protomak modules">
       	<item name="Protomak Engine" href="protomak-engine/index.html" />
+      	<item name="Protomak Maven Plugin" href="maven-protomak-plugin/index.html" />
       </menu> 
       
       <menu ref="reports" />
