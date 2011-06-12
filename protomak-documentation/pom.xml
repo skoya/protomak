@@ -15,6 +15,7 @@
 	
 	<modules>
 	  <module>../protomak-engine</module>
+	  <module>../maven-protomak-plugin</module>
 	</modules>
 
 	<name>protomak-documentation</name>
