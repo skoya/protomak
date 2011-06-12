@@ -94,6 +94,13 @@
 			<timezone>UTC</timezone>
 		</developer>
 	</developers>
+	
+	<distributionManagement>
+	  <site>
+	    <id>www.jemos.eu/protomak</id>
+	    <url>scp://tedonema@thor/home/tedonema/runtime/www/projects/protomak/maven-protomak-plugin</url>
+	  </site>
+	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
