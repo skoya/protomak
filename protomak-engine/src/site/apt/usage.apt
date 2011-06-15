@@ -1,0 +1,32 @@
+	---------------------
+	Usage of ProtoMak
+	---------------------
+	ProtoMak Dev Team
+	---------------------
+
+Usages of XSD -> Proto
+
+	Protomak can generate a proto file given an XSD file. 
+	The proto file can then be used by protoc (google protobuf) to generate an object for binary transfer.
+	
+	If you are unfamiliar with the proto language specification please refer to the {{{http://code.google.com/apis/protocolbuffers/docs/proto.html}language guide}}.
+
+
+XSD Namespace -> Proto package
+	
+	\<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/one-simple-single-element" xmlns:tns="http://www.jemos.eu/one-simple-single-element" elementFormDefault="qualified"\>
+	
+	transencodes to:
+	 
+	package xmlschema.2001.org.w3.www
+
+XSD Element -> Proto message
+	
+	\<element name="client" type="string"\>\</element\> 
+	
+    transencodes to:
+	
+	message Client \{
+		required string client = 1;
+	\}
+	
