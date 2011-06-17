@@ -153,6 +153,12 @@ public class TypeVisitor implements XSVisitor {
 			//We assume the complex type is declared within the schema. This probably 
 			//needs to change if the complex type is declared externally
 			XSType elementDeclaredType = element.getType();
+			
+			if (elementDeclaredType.isLocal()) {
+				XsomDefaultComplexTypeProcessor.LOG.debug("XSVisitor: In elementDecl, element name: " + element.getName() + " is anonymous need to create message type.");
+				elementDeclaredType.visit(this);
+			}
+				
 			if (null != elementDeclaredType) {
 
 				if (elementDeclaredType.isComplexType()) {

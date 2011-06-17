@@ -159,6 +159,19 @@ public class XsdToProtoDomainUnitTest {
 		verifyExpectedAndActualProto(protoFileName);
 	}
 
+
+	@Test
+	public void testMultipleDepthInheritedComplexTypes() throws IOException {
+		service.generateProtoFiles(
+				ProtomakEngineTestConstants.MULTIPLE_DEPTH_INHERITED_COMPLEX_TYPES_XSD_PATH,
+				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
+
+		String protoFileName = ProtomakEngineHelper
+				.extractProtoFileNameFromXsdName(ProtomakEngineTestConstants.MULTIPLE_DEPTH_INHERITED_COMPLEX_TYPES_XSD_FILE_NAME);
+
+		verifyExpectedAndActualProto(protoFileName);
+	}
+
 	@Test
 	public void testElementWithComplexAndSimpleTypeWithRestrictions() throws Exception {
 		service.generateProtoFiles(

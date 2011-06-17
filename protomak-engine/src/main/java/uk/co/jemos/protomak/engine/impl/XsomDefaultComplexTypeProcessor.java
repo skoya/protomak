@@ -62,7 +62,7 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 		//Simple types don't have attributes
 		if (type.isComplexType()) {
 			XSComplexType complexType = type.asComplexType();
-			String messageTypeName = ProtomakEngineHelper.getMessageTypeName(complexType.getName(),
+			String messageTypeName = ProtomakEngineHelper.getMessageTypeName(complexType.getName() != null ? complexType.getName() : complexType.getScope().getName(),
 					inputPath);
 			retValue.setName(messageTypeName);
 			TypeVisitor visitor = new TypeVisitor(protoMessages, retValue, inputPath);
