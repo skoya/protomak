@@ -2,7 +2,8 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/single-element-with-complex-type" xmlns:tns="http://www.jemos.eu/single-element-with-complex-type" elementFormDefault="qualified">
 
 <complexType name="Employee">
-	
+	<attribute name="FirstName" type="string" use="required" />
+	<attribute name="LastName" type="string" use="required" />
 </complexType>
 
 <complexType name="Manager">

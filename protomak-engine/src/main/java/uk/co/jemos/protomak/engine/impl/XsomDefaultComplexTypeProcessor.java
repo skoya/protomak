@@ -4,6 +4,7 @@
 package uk.co.jemos.protomak.engine.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -69,10 +70,11 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 			//Determine if the complex type extends another type other than the default anyType
 			XSType baseType = complexType.getBaseType();
 			if (baseType != null
-					&& baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
+					&& !baseType.getName().equals(ProtomakEngineConstants.ANY_TYPE_NAME)) {
 				LOG.info("Processing type: " + type.getName() + " extends " + baseType.getName());
 				ExtendType extend = new ExtendType();
 				extend.setMessageName(baseType.getName());
+				retValue.setExtend(extend);
 			}
 
 			//The visitor fills in the values
@@ -107,17 +109,18 @@ public class XsomDefaultComplexTypeProcessor implements XsomComplexTypeProcessor
 
 		List<MessageAttributeType> attributes = new ArrayList<MessageAttributeType>();
 
-		Iterator<? extends XSAttributeUse> attributeUsesIterator = complexType
-				.iterateAttributeUses();
 		XSAttributeUse complexTypeAttribute = null;
 		MessageAttributeType messageAttributeType = null;
-		while (attributeUsesIterator.hasNext()) {
-			complexTypeAttribute = attributeUsesIterator.next();
+		
+		Collection<? extends XSAttributeUse> attributesCollection = complexType.getAttributeUses();
+		for (Iterator<? extends XSAttributeUse> i = attributesCollection.iterator(); i.hasNext();){
+			complexTypeAttribute = i.next();
 			messageAttributeType = ProtomakEngineHelper.convertXsomAttributeToMessageAttributeType(
 					protoCounter, complexTypeAttribute);
+			LOG.debug(complexType.getName() + ", found attribute : " + messageAttributeType.getName());
 			attributes.add(messageAttributeType);
 		}
-
+		
 		Collections.sort(attributes, ProtomakEngineConstants.MESSAGE_ATTRIBUTE_COMPARATOR);
 
 		for (MessageAttributeType attr : attributes) {

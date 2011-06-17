@@ -4,9 +4,13 @@
 package single_element_with_complex_type.eu.jemos.www
 
 message Employee {
+	required string FirstName = 1;
+	required string LastName = 2;
 }
 
 message Manager {
 	required DirectReports DirectReports = 1;
+	required string FirstName = 2;
+	required string LastName = 3;
 }
 
