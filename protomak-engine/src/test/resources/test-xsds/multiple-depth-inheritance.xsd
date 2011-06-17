@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/single-element-with-complex-type" xmlns:tns="http://www.jemos.eu/single-element-with-complex-type" elementFormDefault="qualified">
 
-<complexType name="Employee">
+<complexType name="Person">
 	<attribute name="FirstName" type="string" use="required" />
 	<attribute name="LastName" type="string" use="required" />
+</complexType>
+
+<complexType name="Employee">
+	<complexContent>
+		<extension base="tns:Person">
+			<attribute name="Salary" type="double" />
+		</extension>
+	</complexContent>
 </complexType>
 
 <complexType name="Manager">
@@ -13,7 +21,7 @@
 					<element name="DirectReports">
 						<complexType>
 							<sequence>
-								<element name="employee" type="tns:Employee"></element>
+								<element name="Employee" type="tns:Employee" maxOccurs="unbounded"></element>
 							</sequence>
 						</complexType>
 					</element>

@@ -86,7 +86,7 @@
 			<element name="extensions" type="tns:ExtensionType"
 				maxOccurs="unbounded" minOccurs="0">
 			</element>
-			<element name="extend" type="tns:ExtendType" maxOccurs="unbounded" minOccurs="0"></element>
+			<element name="extend" type="tns:ExtendType" maxOccurs="1" minOccurs="0"></element>
 		</sequence>
 		<attribute name="name" type="string" use="required"></attribute>
 	</complexType>

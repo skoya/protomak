@@ -87,7 +87,6 @@ public class ProtomakEngineHelper {
 			XSAttributeUse xsdAttribute) {
 
 		MessageAttributeType retValue = new MessageAttributeType();
-		//FIXME Sort out how to fill repeated
 		if (xsdAttribute.isRequired()) {
 			retValue.setOptionality(MessageAttributeOptionalType.REQUIRED);
 		} else {
