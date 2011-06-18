@@ -1,9 +1,18 @@
 	---------------------
-	Protomak Maven Plugin
+	Protomak Ant Task
 	---------------------
 	Marco Tedone
 	---------------------
 	
-How to use Maven Protomak Plugin
+How to use XSD to Proto task
 
-   TBD  
+   To see the Ant task which produces a .proto file from an XSD, do the following:
+   
++-----------------------------------------------------------------------
+
+$ cd ant-protomak-task
+$ mvn clean install antrun:run
+
++-----------------------------------------------------------------------
+
+  That's it!

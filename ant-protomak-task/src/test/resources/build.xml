@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<project name="AntProtomakXsdToProtoExample" default="main" basedir=".">
+	
+  <path id="protomak-test-path" path="${runtime_classpath}" />
+	
+  <taskdef name="mytask" classname="uk.co.jemos.protomak.ant.task.AntProtomakXsdToProtoTask"
+  	classpathref="protomak-test-path" />
+
+  <target name="main">  	
+    <mytask inputXsdFile="${inputXsdPath}" 
+    		outputFolder="/home/protomak/tests-ant" />
+  </target>
+</project>
