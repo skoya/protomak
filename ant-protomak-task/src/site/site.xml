@@ -44,7 +44,7 @@
       
       <menu name="Getting Started">
       	<item name="Home" href="./index.html" />
-		<item name="Global Documentation" href="../protomak-documentation/index.html" />
+		<item name="Global Documentation" href="../protomak-parent/index.html" />
       </menu>
       
       <menu name="Protomak modules">
