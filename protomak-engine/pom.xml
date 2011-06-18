@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<groupId>uk.co.jemos.protomak</groupId>
+		<artifactId>protomak-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 
@@ -317,6 +317,12 @@
 					<footer>Jemos 2002 - 2011: All Rights Reserved. protomak runs under
 						the MIT license</footer>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>emma-maven-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<inherited>true</inherited>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
