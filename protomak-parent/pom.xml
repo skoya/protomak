@@ -16,6 +16,7 @@
 	<modules>
 		<module>../protomak-engine</module>
 		<module>../maven-protomak-plugin</module>
+		<module>../ant-protomak-task</module>
 	</modules>
 
 	<name>protomak-parent</name>
