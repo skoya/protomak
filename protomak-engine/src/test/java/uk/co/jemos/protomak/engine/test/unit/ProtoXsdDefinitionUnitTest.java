@@ -186,7 +186,7 @@ public class ProtoXsdDefinitionUnitTest {
 		extensions.add(factory.manufacturePojo(ExtensionType.class));
 
 		ExtendType extendType = getExtendType(factory);
-		msgType.getExtend().add(extendType);
+		msgType.setExtend(extendType);
 
 		return msgType;
 	}

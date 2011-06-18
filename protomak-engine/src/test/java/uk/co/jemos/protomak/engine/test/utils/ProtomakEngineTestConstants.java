@@ -19,6 +19,9 @@ public class ProtomakEngineTestConstants {
 	/** The name of the single element with complex type XSD file */
 	public static final String SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_FILE_NAME = "single-element-with-inherited-complex-type.xsd";
 	
+	/** The name of the single element with complex type XSD file */
+	public static final String MULTIPLE_DEPTH_INHERITED_COMPLEX_TYPES_XSD_FILE_NAME = "multiple-depth-inheritance.xsd";
+		
 	/** The name of the simple single element XSD file. */
 	public static final String SIMPLE_SINGLE_ELEMENT_FILE_NAME = "one-simple-single-element.xsd";
 
@@ -81,6 +84,11 @@ public class ProtomakEngineTestConstants {
 	public static final String SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_XSD_PATH = TEST_XSDS_FOLDER
 			+ File.separatorChar + SINGLE_ELEMENT_WITH_INHERITED_COMPLEX_TYPE_FILE_NAME;
 
+	/** The path to single-element-with-complex-type */
+	public static final String MULTIPLE_DEPTH_INHERITED_COMPLEX_TYPES_XSD_PATH = TEST_XSDS_FOLDER
+			+ File.separatorChar + MULTIPLE_DEPTH_INHERITED_COMPLEX_TYPES_XSD_FILE_NAME;
+
+	
 	/** The path to multiple-complex-types-only */
 	public static final String MULTIPLE_COMPLEX_TYPES_XSD_PATH = TEST_XSDS_FOLDER
 			+ File.separatorChar + MULTIPLE_COMPLEX_TYPES_ONLY_FILE_NAME;
