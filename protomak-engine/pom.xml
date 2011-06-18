@@ -86,8 +86,8 @@
 		</developer>
 		<developer>
 			<id>edwilde</id>
-			<name>Ed Wilde</name>
-			<email>TBD</email>
+			<name>Edward Wilde</name>
+			<email>ewilde@gmail.com</email>
 			<organization>Jemos</organization>
 			<organizationUrl>http://www.jemos.eu/projects/protomak</organizationUrl>
 			<roles>
@@ -283,6 +283,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.fusesource.hawtbuf</groupId>
+			<artifactId>hawtbuf-protoc</artifactId>
+			<version>1.5</version>
+			<type>maven-plugin</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<reporting>

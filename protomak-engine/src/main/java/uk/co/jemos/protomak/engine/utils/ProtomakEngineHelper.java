@@ -283,6 +283,7 @@ public class ProtomakEngineHelper {
 			}
 		}
 
+		buff.append(";");
 		return buff.toString();
 	}
 

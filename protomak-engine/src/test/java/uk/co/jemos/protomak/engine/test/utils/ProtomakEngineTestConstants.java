@@ -49,6 +49,9 @@ public class ProtomakEngineTestConstants {
 	/** The full path to the folder where to put the generated protos. */
 	public static final String PROTOS_OUTPUT_DIR = "target/generated-sources/protos";
 
+	/** The full path to the folder where to put the generated java classes. */
+	public static final String POJOS_OUTPUT_DIR = "target/generated-sources/java";
+	
 	/** The path to the expected proto files directory */
 	public static final String EXPECTED_PROTO_DIR = "src/test/resources/expected-proto-files";
 
