@@ -15,15 +15,15 @@ Namespace to package
 	
 	\<schema xmlns="http://www.w3.org/2001/XMLSchema" \>
     
-	transcodes to:
+	converts to:
 	
 	package xmlschema.2001.org.w3.www
 
 Element to message
 	
---%{snippet|id=element|url=file://src/site/resources/code-snippets/snippets.xml}
+~~%{snippet|id=element|url=file://src/site/resources/code-snippets/snippets.xml}
     
-	transcodes to:
+	converts to:
 	
 	message Client \{
 		required string client = 1;
@@ -31,9 +31,9 @@ Element to message
 	
 Elements to messages
 
---%{snippet|id=elements|url=file://src/site/resources/code-snippets/snippets.xml}
+~~%{snippet|id=elements|url=file://src/site/resources/code-snippets/snippets.xml}
  	
-	transcodes to:
+	converts to:
 	
 	message BooleanElement \{
 		required bool booleanElement = 2;
@@ -45,6 +45,13 @@ Elements to messages
 
 Enumerations to Enumerations
 
---%{snippet|id=anonymousType|url=file://src/site/resources/code-snippets/snippets.xml}
+~~%{snippet|id=anonymousType|url=file://src/site/resources/code-snippets/snippets.xml}
 
+	converts to:
+
+Complex type to complex message
+
+~~%{snippet|id=complexType|url=file://src/site/resources/code-snippets/snippets.xml}
+
+	converts to:
 
