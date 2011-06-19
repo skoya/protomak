@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.jemos.eu/anonymous-types" 
+	xmlns:tns="http://www.jemos.eu/anonymous-types" elementFormDefault="qualified">
+
+	<!-- START SNIPPET: AnonymousType -->
+    <element name="elementWithAnonymousType">
+      <simpleType>
+        <restriction base="string">
+          <enumeration value="A" />
+          <enumeration value="B" />
+          <enumeration value="C" />
+        </restriction>
+      </simpleType>
+    </element>
+    <!-- END SNIPPET: anonymousType -->
+
+</schema>
