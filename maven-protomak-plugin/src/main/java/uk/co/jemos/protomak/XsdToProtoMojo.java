@@ -12,6 +12,8 @@ import uk.co.jemos.protomak.engine.impl.XsomXsdToProtoDomainConversionServiceImp
  * @goal xsd-to-proto
  * 
  * @phase process-sources
+ * 
+ * @requiresDependencyResolution compile
  */
 public class XsdToProtoMojo extends AbstractMojo {
 

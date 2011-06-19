@@ -8,7 +8,7 @@
 		<version>7</version>
 	</parent>
 
-	<groupId>uk.co.jemos.maven.plugins.protomak</groupId>
+	<groupId>uk.co.jemos.maven.plugins</groupId>
 	<artifactId>maven-protomak-plugin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
