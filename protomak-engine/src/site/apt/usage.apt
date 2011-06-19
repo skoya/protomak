@@ -11,47 +11,106 @@ XSD Schemas to Proto Definitions
 	
 	If you are unfamiliar with the proto language specification please refer to the {{{http://code.google.com/apis/protocolbuffers/docs/proto.html}language guide}}.
 
+
 Namespace to package
-	
-	\<schema xmlns="http://www.w3.org/2001/XMLSchema" \>
-    
+
++--------------------------------------------
+	<schema xmlns="http://www.w3.org/2001/XMLSchema"/>
++--------------------------------------------    
+
 	converts to:
-	
+
++--------------------------------------------
 	package xmlschema.2001.org.w3.www
++--------------------------------------------
 
 Element to message
-	
-~~%{snippet|id=element|url=file://src/site/resources/code-snippets/snippets.xml}
-    
+
++--------------------------------------------	
+	<element name="Client" type="string"/>
++--------------------------------------------
+
 	converts to:
 	
-	message Client \{
++--------------------------------------------	
+	message Client {
 		required string client = 1;
-	\}
+	}
++--------------------------------------------
 	
 Elements to messages
 
-~~%{snippet|id=elements|url=file://src/site/resources/code-snippets/snippets.xml}
- 	
++--------------------------------------------
+	<element name="intElement" type="int"/>
+	<element name="booleanElement" type="boolean"/>
++--------------------------------------------
+
 	converts to:
 	
-	message BooleanElement \{
++--------------------------------------------	
+	message BooleanElement {
 		required bool booleanElement = 2;
-	\}
-
-	message IntElement \{
-		required sfixed_32 intElement = 1;
-	\}
+	}
+	
+	message IntElement {
+			required sfixed_32 intElement = 1;
+	}
++--------------------------------------------
 
 Enumerations to Enumerations
 
-~~%{snippet|id=anonymousType|url=file://src/site/resources/code-snippets/snippets.xml}
++--------------------------------------------
+    <element name="elementWithAnonymousType">
+      <simpleType>
+        <restriction base="string">
+          <enumeration value="A" />
+          <enumeration value="B" />
+          <enumeration value="C" />
+        </restriction>
+      </simpleType>
+    </element>
++--------------------------------------------
+ 
+    converts to:
+    
++--------------------------------------------
+    message ElementWithAnonymousType {
+		enum AnonymousEnum1 {
+			A = 1;
+			B = 2;
+			C = 3;
+		}
+		required AnonymousEnum1 elementWithAnonymousType = 1;
+	}
++--------------------------------------------
+
+Complex types to messages
+
++--------------------------------------------
+	<complexType name="PersonType">
+    	<sequence>
+    		<element name="firstName" type="string" minOccurs="0"/>
+    		<element name="lastName" type="string"/>
+    	</sequence>
+	</complexType>
+	<complexType name="UsePersonType">
+    	<sequence>
+    		<element name="person" type="tns:PersonType" minOccurs="1" maxOccurs="unbounded"/>
+    	</sequence>
+	</complexType>
++--------------------------------------------
 
 	converts to:
 
-Complex type to complex message
++--------------------------------------------
+	message PersonType {
+		optional string firstName = 1;
+		required string lastName = 2;
+	}
+	
+	message UsePersonType {
+		repeated PersonType person = 1;
+	}
++--------------------------------------------
 
-~~%{snippet|id=complexType|url=file://src/site/resources/code-snippets/snippets.xml}
-
-	converts to:
 
