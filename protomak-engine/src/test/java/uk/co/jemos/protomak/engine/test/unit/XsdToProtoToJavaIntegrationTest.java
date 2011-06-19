@@ -37,7 +37,7 @@ public class XsdToProtoToJavaIntegrationTest {
 	}
 
 	@Test
-	public void SimpleSingleElementShouldConvertToAPojo() throws CompilerException {
+	public void simpleSingleElementShouldConvertToAPojo() throws CompilerException {
 		service.generateProtoFiles(ProtomakEngineTestConstants.SIMPLE_SINGLE_ELEMENT_XSD_PATH,
 				ProtomakEngineTestConstants.PROTOS_OUTPUT_DIR);
 
