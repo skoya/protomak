@@ -243,8 +243,7 @@ public class XsomXsdToProtoDomainConversionServiceImpl implements ConversionServ
 
 			if (null == proto.getPackage()) {
 
-				String packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(type
-						.getTargetNamespace());
+				String packageName = ProtomakEngineHelper.convertTargetNsToProtoPackageName(element.getTargetNamespace());
 				LOG.info("Proto package will be: " + packageName);
 				proto.setPackage(packageName);
 			}
