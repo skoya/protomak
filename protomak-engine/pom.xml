@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>uk.co.jemos.protomak</groupId>
-		<artifactId>protomak-parent</artifactId>
+		<artifactId>protomak-parent</artifactId> 
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -287,8 +287,6 @@
 			<groupId>org.fusesource.hawtbuf</groupId>
 			<artifactId>hawtbuf-protoc</artifactId>
 			<version>1.5</version>
-			<type>maven-plugin</type>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
