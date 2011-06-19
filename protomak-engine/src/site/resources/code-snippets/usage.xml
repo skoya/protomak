@@ -3,7 +3,19 @@
 	targetNamespace="http://www.jemos.eu/anonymous-types" 
 	xmlns:tns="http://www.jemos.eu/anonymous-types" elementFormDefault="qualified">
 
-	<!-- START SNIPPET: AnonymousType -->
+    <!-- START SNIPPET: element -->
+    <element name="client" type="string">
+    </element>
+	<!-- END SNIPPET: element -->
+
+
+	<!-- START SNIPPET: elements -->
+    <element name="intElement" type="int"></element>
+	<element name="booleanElement" type="boolean"></element>
+	<!-- END SNIPPET: elements -->
+
+
+	<!-- START SNIPPET: anonymousType -->
     <element name="elementWithAnonymousType">
       <simpleType>
         <restriction base="string">

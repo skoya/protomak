@@ -4,29 +4,47 @@
 	ProtoMak Dev Team
 	---------------------
 
-Usages of XSD -> Proto
+XSD Schemas to Proto Definitions
 
 	Protomak can generate a proto file given an XSD file. 
 	The proto file can then be used by protoc (google protobuf) to generate an object for binary transfer.
 	
 	If you are unfamiliar with the proto language specification please refer to the {{{http://code.google.com/apis/protocolbuffers/docs/proto.html}language guide}}.
 
-
-XSD Namespace -> Proto package
+Namespace to package
 	
-	\<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.jemos.eu/one-simple-single-element" xmlns:tns="http://www.jemos.eu/one-simple-single-element" elementFormDefault="qualified"\>
+	\<schema xmlns="http://www.w3.org/2001/XMLSchema" \>
+    
+	transcodes to:
 	
-	transencodes to:
-	 
 	package xmlschema.2001.org.w3.www
 
-XSD Element -> Proto message
+Element to message
 	
-	\<element name="client" type="string"\>\</element\> 
-	
-    transencodes to:
+--%{snippet|id=element|url=file://src/site/resources/code-snippets/snippets.xml}
+    
+	transcodes to:
 	
 	message Client \{
 		required string client = 1;
 	\}
 	
+Elements to messages
+
+--%{snippet|id=elements|url=file://src/site/resources/code-snippets/snippets.xml}
+ 	
+	transcodes to:
+	
+	message BooleanElement \{
+		required bool booleanElement = 2;
+	\}
+
+	message IntElement \{
+		required sfixed_32 intElement = 1;
+	\}
+
+Enumerations to Enumerations
+
+--%{snippet|id=anonymousType|url=file://src/site/resources/code-snippets/snippets.xml}
+
+
